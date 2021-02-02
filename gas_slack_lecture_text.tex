@@ -1030,7 +1030,7 @@ function getAnswer(formSendEventObject) {
 上記スクリプトを実行すると，以下のようなログが出力されます。メールアドレスが正しく取得できることが確認できます。
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=Event Object output example 4]
-[19-12-12 17:56:50:299 JST] RespondentEmail: shimada_ken@works-hi.co.jp
+[19-12-12 17:56:50:299 JST] RespondentEmail: shimada_ken@example.com
 [19-12-12 17:56:50:441 JST] Question: Paragraph Text Question
 [19-12-12 17:56:50:442 JST] Answer: Test Message
 [19-12-12 17:56:50:535 JST] Question: List Question
@@ -1057,7 +1057,7 @@ function getAnswer(formSendEventObject) {
 上記のようなフォームの回答をスクリプトから取り出すと，以下のような結果が取得できます。
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=Event Object sample 6]
-[19-12-12 01:40:55:372 PST] RespondentEmail: shimada_ken@works-hi.co.jp
+[19-12-12 01:40:55:372 PST] RespondentEmail: shimada_ken@example.com
 [19-12-12 01:40:55:446 PST] Question: チェックボックス形式の質問
 [19-12-12 01:40:55:447 PST] Answer: 選択肢 2,その他
 [19-12-12 01:40:55:520 PST] Question: 日時の質問
@@ -1404,7 +1404,7 @@ function gasFormPractice(eventObj) {
   var answer = answers[0].getResponse();
   
   var email = response.getRespondentEmail();
-  var mention = '<@' + email.replace('@works-hi.co.jp','') + '>';
+  var mention = '<@' + email.replace('@example.com','') + '>';
   
   const WEBHOOK = '{Webhook URL}';
   
