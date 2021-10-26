@@ -4,7 +4,7 @@
 \usepackage[dvipdfmx]{graphicx,color}
 \usepackage[dvipdfmx]{hyperref}
 \usepackage{pxjahyper}
-\usepackage{listings,jlisting}
+\usepackage{listings, jvlisting}
 \usepackage{ascmac}
 \usepackage{float}
 \usepackage{txfonts}
@@ -64,21 +64,21 @@ setpagesize=false,
   keywordstyle=[2]{\color{keyword2}\textbf},%キーワード2のスタイル
   keywordstyle=[3]{\color{keyword3}\textbf},%キーワード3のスタイル
   keywordstyle=[4]{\color{keyword4}\textbf},%キーワード4のスタイル
-    commentstyle={\gtfamily\small\color{comment}},%コメントのスタイル
-    stringstyle={\gtfamily\small\color{string}},%文字列のスタイル
-    numbers=left,%行番号は左
-    stepnumber=1,%一行ずつ行番号をふる
-    numberstyle={\sffamily\small},%行番号の書式
-    xleftmargin=0zw, %左余白
-    xrightmargin=0zw,%右余白
-    tabsize=4,%タブの空白数
-    frame=single,%フレームの書式
-    frameround=tttt,%角を丸めるかどうか tで丸める
-    breaklines=true,%長くなったら途中で改行
-    captionpos=b,%タイトルの位置
-    breakindent=10pt,%改行されたときの送り幅
-    showstringspaces=false,%文字列中の半角スペースを表示させない
-    lineskip=-1pt%通常の文章より行送りを狭くする
+  commentstyle={\gtfamily\small\color{comment}},%コメントのスタイル
+  stringstyle={\gtfamily\small\color{string}},%文字列のスタイル
+  numbers=left,%行番号は左
+  stepnumber=1,%一行ずつ行番号をふる
+  numberstyle={\sffamily\small},%行番号の書式
+  xleftmargin=0zw, %左余白
+  xrightmargin=0zw,%右余白
+  tabsize=4,%タブの空白数
+  frame=single,%フレームの書式
+  frameround=tttt,%角を丸めるかどうか tで丸める
+  breaklines=true,%長くなったら途中で改行
+  captionpos=b,%タイトルの位置
+  breakindent=10pt,%改行されたときの送り幅
+  showstringspaces=false,%文字列中の半角スペースを表示させない
+  lineskip=-1pt%通常の文章より行送りを狭くする
 }
 
 \title{Google Apps ScriptとSlack Incoming Webhooksを使った\\Slack bot 入門}
