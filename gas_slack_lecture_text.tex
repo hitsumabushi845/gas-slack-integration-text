@@ -96,14 +96,14 @@ setpagesize=false,
 
 \section{はじめに}
 
-こんにちは。hitsumabushi845 です。2019年冬に私の勤務している株式会社Works Human Intelligenceにて全4回ほど実施していた Google Apps Script $\times$ Slack 講座の内容を大幅な加筆とともにテキストにしました。
+こんにちは。hitsumabushi845 です。2019年冬に私の勤務している株式会社 Works Human Intelligence にて全4回ほど実施していた Google Apps Script $\times$ Slack 講座の内容を大幅な加筆とともにテキストにしました。
 
 
-この講座はもともとスライドを使ったハンズオン形式で実施していましたが，テキストにするにあたり改めて構成を整理しなおし，ハンズオンで行っていた部分は練習問題として各章の最後に掲載しています。練習問題以外の部分でも少しずつ写経ができるようにし，実際に手を動かして確認できるよう意識しています。なお，本文中の\href{http://google.co.jp}{赤文字}になっているところは，対応する Web サイトへのリンクが埋め込まれています。必要に応じて参照してください。
+会社で行った講座ではスライドを使ったハンズオン形式で実施していましたが，テキストにするにあたり改めて構成を整理しなおし，ハンズオンで行っていた部分は練習問題として各章の最後に掲載しています。練習問題以外の部分でも，写経を通して少しずつ手を動かして確認できるよう意識しています。なお，本文中の\href{http://google.co.jp}{赤文字}になっているところには対応する Web サイトへのリンクが埋め込まれています。必要に応じて参照してください。
 
 \subsection{対象読者}
 
-主に以下を対象としています。Google Apps Script は JavaScript 1.6 ベースのスクリプト言語です\footnote{2020年2月からV8ランタイムが選べるようになりました。}が，その文法については本テキストでは触れません。しかし，本テキストでは基本的なデータ型，条件分岐，ループ程度しか扱いませんので，自信のない方は\href{https://jsprimer.net/}{JavaScript Primer}を参照することをおすすめします。
+本書は主に以下を対象としています。Google Apps Script は JavaScript ベースのスクリプト言語です。本テキストでは，その文法の詳細については触れません。本テキストでは基本的なデータ型，条件分岐，ループ程度しか扱いませんので，JavaScript そのものについて自信のない方は\href{https://jsprimer.net/}{JavaScript Primer} 等のウェブサイトを適宜参照することをおすすめします。
 
 \begin{itemize}
 \item プログラミング初級者程度の知識があり，なにか作ってみたい人
@@ -116,14 +116,14 @@ setpagesize=false,
 
 \section{概要}
 
-本章では，このテキストで取り扱う2つのツール，Google Apps ScriptとSlack Incoming Webhooksについて説明します。Google Apps Script，Incoming Webhooksとはなにか，どういったことができるのか，そしてそれらの使い方といった内容を説明します。これらの具体的な使用方法については次章以降で説明します。
+本章では，このテキストで取り扱う2つのツール，Google Apps ScriptとSlack Incoming Webhooksについて説明します。Google Apps Script，Incoming Webhooksとはなにか，どういったことができるのか，そしてそれらの利用方法を説明します。プログラムを交えた具体的な使用方法については次章以降で説明します。
 
 \subsection{Google Apps Scriptとは}
 \label{subsec:About GAS}
 
-\href{https://developers.google.com/apps-script/}{Google Apps Script（GAS）} は，G Suite上にある軽量スクリプトプラットフォーム（FaaS）です。\textbf{G Suite上にある}というのがポイントで，Google SpreadsheetsやGoogle Docs，GmailなどといったGoogle Appsとの親和性が高いことが特徴です。スクリプトからGoogle Apps上のデータを操作したり，Google Appsからスクリプトを実行したりと，Google Appsとスクリプトをシームレスに連携することができます。
+\href{https://developers.google.com/apps-script/}{Google Apps Script（GAS）} は，G Suite上にある軽量スクリプトプラットフォーム（FaaS）です。\textbf{G Suite上にある}というのがポイントで，Google SpreadsheetsやGoogle Docs，GmailなどといったGoogle Appsとの親和性が高いことが特徴です。スクリプトからGoogle Apps上のデータを操作したり，逆にGoogle Appsからスクリプトを実行したりと，Google Appsとスクリプトをシームレスに連携することができます。
 
-一方で，クラウドサービスとしてのスクリプト実行環境であるため，スクリプトの呼び出し回数やAPIの実行時間に\href{https://developers.google.com/apps-script/guides/services/quotas}{制限があります}。したがって，いわゆるバッチ処理などといった，時間のかかる処理をGAS上で行うのは現実的ではありません。
+一方で，サービスとしてのスクリプト実行環境であるため，スクリプトの呼び出し回数やAPIの実行時間に\href{https://developers.google.com/apps-script/guides/services/quotas}{制限があります}。したがって，いわゆるバッチ処理などといった，時間のかかる処理をGAS上で行うのは現実的ではありません。
 
 
 GASの画面には，\href{https://script.google.com/home}{https://script.google.com/home} からアクセスできます（図\ref{fig:gas_main}）。
@@ -144,34 +144,35 @@ GASの画面には，\href{https://script.google.com/home}{https://script.google
 \end{figure}
 
 
-加えて，なぜGoogle Apps Script単体でのHOW-TOではなく，Slackとの連携を主題に置いているか，といった点にも触れておきたいと思います。
-GASはG Suiteを活用する上で非常に強力なツールですが，GAS以外の手段については意識したほうがよいでしょう。というのも，各Google Appsそれ自体にも多くの機能が備わっており，スクリプトを書くまでもなくGoogle Apps自体の機能で目的を実現できる場合もあるからです。
+ここで，なぜ本書はGAS単体でのHOW-TOでなくSlackとの連携を主題に置いているか，といった点にも触れておきたいと思います。
+GASはG Suiteを活用する上で非常に強力なツールですが，各Google Apps自身の持つ機能については意識したほうがよいでしょう。というのも，各Google Appsそれ自体にも多くの機能が備わっており，場合によってはスクリプトを書くまでもなくGoogle Apps自体の機能で目的を実現できるからです。
 
-例として，「Google Spreadsheetsに入力された日本語の文章を英語に翻訳する」といったケースを考えてみます。先程説明したように，GASは各種Google Appsとシームレスに連携することができ，GASにはGoogle SpreadsheetsとGoogle TranslateへのAPIも含まれています。したがって，
+例として，「Google Spreadsheetsに入力された日本語の文章を英語に翻訳する」といったケースを考えてみます。先程説明したように，GASは各種Google Appsとシームレスに連携することができ，この連携できるサービスにはGoogle SpreadsheetsとGoogle Translateもそれぞれ含まれています。したがって，
 \begin{enumerate}
 \item Google Spreadsheets に入力されている日本語の文章を取得する
 \item 取得された文章をGoogle Translateに流し込む
 \item Google Translateによって翻訳された文章をGoogle Spreadsheetsに書き込む
 \end{enumerate}
-といった操作はGASを用いて以下のようなスクリプトを書くことで実現できます。
+といった操作はGASを用いると以下のスクリプトで実現できます。
 
- \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=Translate Script]
+ \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=Translate Script Sample]
 function translateSample() {
 
-  var spreadsheet = SpreadsheetApp.openById('your/spreadsheet/id');
-  var sheet = spreadsheet.getSheetByName('your/sheet/name');
-  var ja_contents = sheet.getRange(2,1,sheet.getLastRow()-1).getValues();
-  var translated_text = ""
+  const sheet = SpreadsheetApp.openById('1JXMAOYgEId21jrJ8A51nl45jGDBIoPIqVWKbTw2fsuk').getSheetByName('GAS');
+  const ja_contents = sheet.getRange(2,1,sheet.getLastRow()-1).getValues();
   
-  for (var i = 0; i < ja_contents.length; i++) {
-    translated_text = LanguageApp.translate(ja_contents[i], 'ja', 'en');
-    sheet.getRange(i+2, 2).setValue(translated_text);
+  for (let i = 0; i < ja_contents.length; i++) {
+    sheet
+      .getRange(i+2, 2)
+      .setValue(
+        LanguageApp.translate(ja_contents[i], 'ja', 'en')
+      );
   }
 }
  \end{lstlisting}
 
 
-さて，このようなケースでGASを用いるのは本当にベストな選択でしょうか？実は，Google Spreadsheetsには\href{https://support.google.com/docs/answer/3093331?hl=ja}{GOOGLETRANSLATEという関数が用意されています}。したがって，そもそもスクリプトを書く必要すらなく，Google Spreadsheetsの持つ機能だけで行いたかったことは実現できます\footnote{``翻訳の質''という観点で考えると，GASを用いた方法のほうが良い場合もあります。実際には実装コストと併せて考える必要があると思います。see: \href{https://qiita.com/kazinoue/items/82779a11af8a2dea0d21}{https://qiita.com/kazinoue/items/82779a11af8a2dea0d21}}。
+さて，このようなケースでGASを用いるのは本当にベストな選択でしょうか？実は，Google Spreadsheetsには\href{https://support.google.com/docs/answer/3093331?hl=ja}{GOOGLETRANSLATEという関数が用意されています}。したがって，そもそもスクリプトを書く必要すらなく，Google Spreadsheetsの持つ機能だけで行いたかったことは実現できます\footnote{``翻訳の質''という観点で考えると，GASを用いた方法のほうが良い場合もあります。実際には実装コストと併せて考える必要があると思います。see also: \href{https://qiita.com/kazinoue/items/82779a11af8a2dea0d21}{https://qiita.com/kazinoue/items/82779a11af8a2dea0d21}}。
 
 
 上記の例ではGoogle SpreadsheetsとGoogle Translateの連携がGoogle Spreadsheetsだけで可能であることを説明しました。しかし，一般的には複数のGoogle Appsを組み合わせた処理はそれほど機能として用意されていません。なので，\textbf{複数のGoogle Appsを連携させる}用途，\textbf{Google Appsと外部サービスのAPIを連携させる}用途などではGASが効果を発揮する可能性が高いです。そのため，本テキストでも\textbf{Slackとの連携}を主軸に置いています。
@@ -181,7 +182,7 @@ function translateSample() {
 
 \href{https://api.slack.com/messaging/webhooks}{Incoming Webhooks}はアプリケーションやプログラムからSlackにメッセージを投稿する方法(API)のひとつです。Webhook URLと呼ばれるURLに，投稿したい内容を持ったHTTPリクエストを送ると，Slack にメッセージが投稿されます。
 
-\begin{itembox}[l]{APIとは}
+\begin{itembox}[l]{Column: APIとは}
 
 API;Application Programming Interface とは，以下のように\href{http://e-words.jp/w/API.html}{説明されます}。
 
@@ -194,11 +195,11 @@ API;Application Programming Interface とは，以下のように\href{http://e-
 
 一方で，GAS自体もAPIと呼ぶことができます。この場合，「あるコンピュータプログラム」はGoogle Apps，「外部の他のプログラム」をGASと置き換えます。先程のスクリプトの例で登場した\textbf{SpreadsheetApp}や\textbf{LanguageApp}はそれぞれ，Google Spreadsheets，Google Translateを操作するためのオブジェクトですので，これらはAPIとなります。
 
-特に，エンドポイントURLへのHTTPリクエストによって扱うAPIのことを，\textbf{Web API}と呼びます。したがって，Incoming WebhooksはWeb APIに該当します。
+特に，エンドポイントURLへのHTTPリクエストによって扱うAPIのことを，\textbf{Web API}と呼びます。Incoming WebhooksはWeb APIに該当します。
 
 \end{itembox}
 
-さて，Incoming Webhooksでは``投稿したい内容''をHTTPリクエストとして渡すとSlackにメッセージを投稿できるのでした。この``投稿したい内容''として必要な情報には何があるでしょうか？少なくとも，\textbf{投稿する内容（本文）}と\textbf{投稿する先（チャンネルやDM先）}は必要そうです。実は，Incoming Webhooksでは，図\ref{fig:webhook_sample}のように，通常私たちがSlackに投稿する形式以上の表現が可能です。そのため，Incoming Webhooksを使ってメッセージを投稿する際に指定できる情報は\textbf{本文}と\textbf{チャンネル}だけでなく，もっとたくさんありそうです。
+さて，Incoming Webhooksでは``投稿したい内容''をHTTPリクエストとして渡すとSlackにメッセージを投稿できるのでした。この``投稿したい内容''として必要な情報には何があるでしょうか？少なくとも，\textbf{投稿する内容（本文）}と\textbf{投稿先（チャンネルやDM先）}は必要そうです。実は，Incoming Webhooksでは，図\ref{fig:webhook_sample}の例のように，通常私たちがSlackに投稿する形式以上の表現が可能です。そのため，Incoming Webhooksを使ってメッセージを投稿する際に指定できる情報は\textbf{本文}と\textbf{チャンネル}だけでなく，沢山あります。
 
 \begin{figure}[h]
  \centering
@@ -207,19 +208,19 @@ API;Application Programming Interface とは，以下のように\href{http://e-
  \label{fig:webhook_sample}
 \end{figure}
 
-現在，Slackには以下の2つの形式のIncoming Webhooksがあります。
+現在，Slackでは以下2つの形式でIncoming Webhooksが提供されています。
 \begin{enumerate}
 \item Custom Integration\\
-\textbf{カスタム インテグレーション}として設定するIncoming Webhooks。こちらでしか使えない機能もあるが，現在では非推奨の形式。
+\textbf{カスタム インテグレーション}として設定するIncoming Webhooks。こちらでしか使えない機能もあるが，現在では\textbf{非推奨}の形式。
 \item App\\
-\textbf{Slack App}として設定するIncoming Webhooks。現在はこちらが推奨されている。
+\textbf{Slack App}として設定するIncoming Webhooks。\textbf{現在はこちらが推奨されている}。
 \end{enumerate}
 
-それぞれの形式のIncoming Webhooksについて詳しく説明します。
+それぞれの形式について詳しく説明します。
 
 \subsubsection{Custom Integration(Legacy)}
 
-Slackでは，よく使いそうな機能が組み込みのアプリケーションとして用意されており，必要に応じて用途に即した形で設定を追加できます。これを\textbf{カスタムインテグレーション}といいます。\textbf{よく使いそうな機能}には，Incoming WebhooksのほかにOutgoing WebhooksやSlash Commandsなどがあります。
+Slackでは，よく使いそうな機能が組み込みのアプリケーションとして用意されており，必要に応じて用途に即した形で設定を追加できます。これを\textbf{カスタムインテグレーション}といいます。ここで言う\textbf{よく使いそうな機能}には，Incoming Webhooksのほか，Outgoing WebhooksやSlash Commandsなどがあります。
 
 設定済みのカスタムインテグレーションは，\\
 \verb|https://{ワークスペース名}.slack.com/apps/manage/custom-integrations|\\
@@ -235,7 +236,7 @@ Slackでは，よく使いそうな機能が組み込みのアプリケーショ
 カスタムインテグレーションは，後述する理由により現在では\textbf{非推奨}の形式ですので，上記の画面上にも\textbf{Slackアプリに置き換えることをおすすめします。}と記載されています。
 
 
-Incoming Webhooksの設定を追加する場合は，この画面上でIncoming Webhooksと書かれている部分を選択します。
+Incoming Webhooksの設定を追加する場合は，この画面上の設定済みカスタムインテグレーションから、Incoming Webhooksと書かれている部分を選択します。設定済みカスタムインテグレーションにIncoming Webhooksがない場合は、\ref{appendix:install incoming webhooks}を参照の上、SlackワークスペースへIncoming Webhooksのインストールを行ってください。
 
 \begin{figure}[h]
  \centering
@@ -244,19 +245,25 @@ Incoming Webhooksの設定を追加する場合は，この画面上でIncoming 
  \label{fig:custom_integration2}
 \end{figure}
 
-画面上に\textbf{設定をリクエストする}といったボタンが表示されています。これをクリックすると，Slackワークスペースの管理者に設定の追加をリクエストすることができます。ちなみに，このボタンが\textbf{設定を追加}になっている場合は，管理者の承認を必要とせず，自由に設定を追加できます。
+画面上に``\textbf{設定を追加}''といったボタンが表示されています。これをクリックすると，Incoming Webhookの設定を追加できます。
+ちなみに，このボタンが``\textbf{設定をリクエストする}''になっている場合は，設定の追加にワークスペース管理者の承認が必要です。
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[keepaspectratio, scale=0.4]{images/configure_incoming_webhook.png}
+  \caption{Incoming Webhookを設定する}
+ \end{figure}
 
-カスタムインテグレーションのIncoming Webhooksに\textbf{デフォルトの}チャンネルやユーザー名・アイコンなどを決めた設定を追加すると，独自のURLが発行されます。このURLがWebhook URLです。このURLに対して，投稿したい内容を持ったHTTPリクエストを送ると，事前に設定したデフォルトのチャンネルに対して，デフォルトのユーザー名・アイコンで投稿が行われます。
+カスタムインテグレーションのIncoming Webhooksに\textbf{デフォルトの}チャンネルやユーザー名・アイコンなどを決めた設定を追加すると，独自のURLが発行されます。このURLがWebhook URLです。このURLに対して，投稿したい内容を持ったHTTPリクエストを送ると，指定したデフォルトのチャンネルに対して，デフォルトのユーザー名・アイコンで投稿が行われます。
 
 
 なお，このデフォルトのチャンネルやユーザー名，アイコンはいつでも変更できます。
 
 \clearpage
-カスタムインテグレーションのIncoming Webhooksでのみ可能な使い方として，\textbf{投稿先のチャンネル，投稿のユーザー名，アイコンを自由に変えられる}ことが挙げられます。
+カスタムインテグレーションのIncoming Webhooksでのみ可能な使い方として，\textbf{1つのWebhook URLで投稿先のチャンネル，投稿のユーザー名，アイコンを自由に変えられる}ことが挙げられます。
 
-先程説明したように，投稿する内容のみを使ってWebhook URLに対してPOSTを行うと，デフォルトのチャンネルに対して投稿が行われます。
-例として，以下のCurlコマンドの実行例を見てみます。
+先程説明したように，投稿する内容のみを使ってWebhook URLに対してPOSTを行うと，Incoming Webhookの設定時に指定したデフォルトのチャンネルに対して投稿が行われます。
+以下にcURLコマンドでのPOSTリクエストの実行例を示します。
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,language=command.com,frame=single,caption=Curl sample]
 > curl -X POST --data-urlencode "payload={\"text\": \"TEST\" }" https://hooks.slack.com/services/your/webhook/url
@@ -270,12 +277,12 @@ ok
  \label{fig:webhook_sample2}
 \end{figure}
 
-図\ref{fig:webhook_sample2}では，事前に設定したデフォルトのユーザー名（\verb|TSD CI webhook|)で投稿されています。アイコンは設定していないため，カスタムインテグレーションのアイコンが表示されています。
+図\ref{fig:webhook_sample2}では，事前に設定したデフォルトのユーザー名（\verb|incoming-webhook|)で投稿されています。アイコンは設定していないため，カスタムインテグレーションのアイコンが表示されています。
 
 ここで，Webhook URLに送信する情報（上記Curlコマンドのpayload要素)をいくつか追加してみましょう。
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,language=command.com,frame=single,caption=Curl sample2]
-> curl -X POST --data-urlencode "payload={\"text\": \"TEST\", \"channel\": \"@shimada_ken\", \"username\": \"This is custom integration\", \"icon_emoji\": \":tada:\" }" https://hooks.slack.com/services/your/webhook/url
+> curl -X POST --data-urlencode "payload={\"text\": \"TEST\", \"username\": \"This is custom integration\", \"icon_emoji\": \":tada:\" }" https://hooks.slack.com/services/your/webhook/url
 ok
 \end{lstlisting}
 
@@ -284,14 +291,13 @@ payload要素が長くなりすこし見づらくなってしまいました。p
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=Formed payload,label=formedpayload]
 payload = {
   "text": "TEST",
-  "channel": "@shimada_ken",
   "username": "This is custom integration",
   "icon_emoji": ":tada:"
 }
 \end{lstlisting}
 
-ここでは，\verb|text|の他に，\verb|channel|，\verb|username|，\verb|icon_emoji|を設定しています。それぞれ，送信先のチャンネル，表示名，アイコンとなる絵文字に対応します。
-上記Curlコマンドを実行すると，以下のような内容が私にダイレクトメッセージで送信されます。ユーザー名が\verb|TSD CI webhook|から\verb|This is custom integration|に，アイコンがクラッカーの絵文字になっていることがわかります。カスタムインテグレーションのIncoming Webhooksでは，アイコンをSlackの絵文字で代替することができます。もちろん，画像を指定することも可能です。
+ここでは，\verb|text|の他に，\verb|username|，\verb|icon_emoji|を設定しています。それぞれ，送信先のチャンネル，表示名，アイコンとなる絵文字に対応します。
+上記Curlコマンドを実行すると，以下のような内容が同じチャンネルに送信されます。ユーザー名が\verb|incoming-webhook|から\verb|This is custom integration|に，アイコンがクラッカーの絵文字になっていることがわかります。カスタムインテグレーションのIncoming Webhooksでは，アイコンをSlackの絵文字で代替することができます。また，画像を指定することも可能です。画像を指定する場合は，画像のURLを\verb|icon|フィールドに設定します。
 
 \begin{figure}[h]
  \centering
@@ -304,9 +310,9 @@ payload = {
 
 \subsubsection{App(Recommended)}
 
-一方で，1つのWebhook URLには1つの役割しか与えないほうがよい，という考えがあります。なぜなら，あるカスタムインテグレーションによって作成されたWebhook URLがあったとき，これがどのプログラム・アプリケーションに使われているのか把握できないといった問題が発生するからです。カスタムインテグレーションのWebhook URLは，任意のチャンネルに対して，任意の見た目（ユーザー名やアイコン）で投稿ができてしまうので，極端な話をするとこれは1つのワークスペースに1つあればよいということになってしまいます。つまり，カスタムインテグレーションによるIncoming Webhooksでは，Webhook URLと実際にURLが使用されるアプリケーション間の関係といった情報が欠落してしまっているのです。
+一方で，1つのWebhook URLには1つの役割しか与えないほうがよい，という考え方があります。なぜなら，あるカスタムインテグレーションによって作成されたWebhook URLがあったとき，これがどのプログラム・アプリケーションに使われているのか把握できなくなるからです。カスタムインテグレーションのWebhook URLでは，任意のチャンネルに任意の見た目（ユーザー名やアイコン）で投稿ができてしまいます。極端な話をすると，これではWebhook URLは1つのワークスペースに1つあればよいということになってしまいます。つまり，カスタムインテグレーションによるIncoming Webhookでは，あるメッセージがWebhook URLを介して送信されたとき，メッセージを見ただけではそれがどのWebhook URLから送信されたのかが分からなくなってしまっているのです。
 
-そこで，Slack Appの一部としてのIncoming Webhooksが登場します。これは，Slack Appとしてワークスペースに設定するので，そのAppの役割に即して使われる想定で存在します。当然，Appの役割は決まっており，ユーザー名やアイコン，投稿するチャンネルが変わることはないはずです。ですので，このIncoming Webhooksではこれらを変えることができません。1つのWebhook URLには必ず1つのチャンネルが結びついており，例外はありません。もし1つのAppが複数のチャンネルに投稿しなければならない場合は，AppからWebhook URLを\textbf{投稿先の数だけ}発行します。
+そこで，Slack Appの一部としてのIncoming Webhookが登場します。これはSlack Appとしてワークスペースに設定するので，そのAppの役割に即して使われる想定で存在します。当然，Appの役割は決まっており，ユーザー名やアイコン，投稿するチャンネルもまたその役割に即したものになるはずです。ですので，このIncoming Webhookではメッセージの送信時にこれらを変えることができません。1つのWebhook URLには必ず1つのチャンネルが結びついており，同じURLから他のチャンネルにメッセージを送信することはできません。もし1つのAppが複数のチャンネルに投稿しなければならない場合は，AppからWebhook URLを\textbf{投稿先の数だけ}発行します。
 
 AppとしてIncoming Webhooksを利用する手順は以下の通りとなります。
 
@@ -372,7 +378,7 @@ Appが作成されると，Appごとに図\ref{fig:create_new_app3}のような�
  \centering
  \includegraphics[keepaspectratio, scale=0.6]{images/create_incoming_webhooks.png}
  \caption{Incoming Webhooks画面(App)}
- \label{fig:create_new_app4}
+ \label{fig:request_install_app}
 \end{figure}
 
 すると，図\ref{fig:create_new_app4}の画面に，設定したチャンネルへ投稿するためのWebhook URLが表示されます。GASからSlackへ投稿するために，このURLを控えておきます。なお，このURLはApp画面でいつでも確認できます。
@@ -380,9 +386,9 @@ Appが作成されると，Appごとに図\ref{fig:create_new_app3}のような�
 \clearpage
 \section{単独で動作するGoogle Apps Script}
 
-前章では，Google Apps Scriptを利用する画面へのアクセス方法と，Incoming WebhooksのWebhook URL発行方法について説明しました。ここからは，実際にGoogle Apps ScriptとIncoming Webhooksを使ってみましょう。といっても，この章ではGoogle Appsとの連携は行いません。まずは単体のGoogle Apps ScriptからIncoming Webhooksを使ってSlackにメッセージを投稿してみましょう。
+前章では，Google Apps Scriptを利用する画面へのアクセス方法と，Incoming WebhooksのWebhook URL発行方法について説明しました。ここからは，実際にGoogle Apps ScriptとIncoming Webhooksを使ってみましょう。この章ではGoogle Appsとの連携は行わず，まずは単体のGoogle Apps Scriptから作成したWebhook URLを使ってSlackにメッセージを投稿してみましょう。
 
-なお，本章以降で使用するWebhook URLはカスタムインテグレーションから発行したものではなく，Appから発行したものを使用します。
+なお，本章以降で使用するWebhook URLはAppから発行したものを使用します。
 
 \paragraph{本章で扱うトピック}
 \begin{itemize}
@@ -392,9 +398,9 @@ Appが作成されると，Appごとに図\ref{fig:create_new_app3}のような�
 \item UrlFetchApp
 \end{itemize}
 
-\subsection{Example: GASからIncoming Webhooksを使ってSlackに投稿してみよう}
+\subsection{Example: GASからIncoming Webhookを使ってSlackに投稿してみよう}
 
-本節では，Google Apps ScriptからIncoming WebhooksのWebhook URLに対してPOSTリクエストを行い，Slackにメッセージを送信します。\ref{subsec:About GAS}にて紹介した経路で，Google Apps Scriptのプロジェクトを作成します。
+本節では，GASからIncoming WebhookのWebhook URLに対してPOSTリクエストを行い，Slackにメッセージを送信します。\ref{subsec:About GAS}にて紹介した経路で，GASのプロジェクトを作成します。
 
 プロジェクトを作成すると，以下のようなスクリプトコードが既に入力された状態でエディタ画面が開きます。
 
@@ -404,7 +410,7 @@ function myFunction() {
 }
 \end{lstlisting}
 
-\verb|myFunction|という空の関数が定義されている状態です。関数名が\verb|myFunction|では何をする関数かわかりづらいので，この関数名を変えておきましょう。本テキストでは，\verb|slackSender|という名前をつけますが，好きな名前をつけてよいです。
+\verb|myFunction|という空の関数が定義されている状態です。関数名が\verb|myFunction|では何をする関数かわかりづらいので，この関数名を変えておきましょう。本テキストの例では，\verb|slackSender|という名前をつけます。
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=Change function name]
 function slackSender() {
@@ -414,7 +420,7 @@ function slackSender() {
 
 \subsubsection{スクリプトの実行方法とロギング}
 
-まずはGASの実行方法を紹介します。ですが，まだ\verb|slackSender|関数にはなにも処理を書いていないので，当然このまま実行するとなんの処理も実行されません。なので，実行できていることを確認するために，ログ出力を記述します。ログ出力は，\verb|Logger.log()|で行えます。いわゆるJavaScriptにおける\verb|console.log()|のようなものです。\verb|Logger.log()|は，文字列を渡せば文字列が表示されますし，変数を渡せばその中身が表示されます。
+まずはGASの実行方法を紹介します。ですが，まだ\verb|slackSender|関数にはなにも処理を書いていないので，当然このまま実行すると何の処理も実行されません。実行できていることを確認するために，ログ出力を記述します。ログ出力は，\verb|Logger.log()|で行えます。いわゆるJavaScriptにおける\verb|console.log()|のようなものです。\verb|Logger.log()|も同様に，文字列を渡せば文字列が表示されますし，変数を渡せばその中身が表示されます。
 
 ひとまず実行できていることが確認できればよいので，以下のようにログ出力を記述します。中に入る文字列は当然なんでもよいです。
 
@@ -425,7 +431,7 @@ function slackSender() {
 \end{lstlisting}
 
 
-上記のようにスクリプトが書けたら，実行してみましょう。実行は，エディタ画面上部にあるツールバーの，再生ボタン（▶ボタン）をクリックします。複数の\verb|function|が定義されている場合は，実行する\verb|function|を右側のドロップダウンから選択できます。
+上記のようにスクリプトが書けたら，実行してみましょう。実行は，エディタ画面上部にあるツールバーの，実行ボタン（▶ボタン）をクリックします。複数の\verb|function|が定義されている場合は，実行する\verb|function|を右側のドロップダウンから選択できます。
 
 \begin{figure}[H]
  \centering
@@ -436,7 +442,7 @@ function slackSender() {
 
 初めての実行時，\textbf{Authorization required}といったタイトルのダイアログが表示されます。これは，「このスクリプトを実行していいですか？」という確認と，それをユーザーのG Suiteアカウントから承認するダイアログです。画面の指示に従って承認してください。詳しくは，\href{https://tonari-it.com/gas-script-approval/}{こちら}のウェブサイトが詳しいので，必要に応じて参照してください。
 
-実行が完了したら，ログを確認してみましょう。ログは，ツールバーの\textbf{表示}から\textbf{ログ}をクリックするか，\verb|Ctrl+Enter|で表示できます。正常に実行できていれば，以下の図\ref{fig:standalone_gas2}のようにログが出力されています。\verb|Logger.log()|を使ったログ出力はスクリプトのデバッグによく使用するので，覚えておきましょう。
+実行すると，自動的にログが画面下部に表示されます。ログはツールバーの\textbf{実行ログ}をクリックするか，\verb|Ctrl(Cmd)+Enter|でも表示できます。正常に実行できていれば，以下の図\ref{fig:standalone_gas2}のようにログが出力されています。\verb|Logger.log()|を使ったログ出力はスクリプトのデバッグによく使用するので，覚えておきましょう。
 
 \begin{figure}[H]
  \centering
@@ -448,12 +454,12 @@ function slackSender() {
 \subsubsection{UrlFetchAppとWeb APIへのHTTPリクエスト}
 
 
-ここから本格的にGoogle Apps Script上でIncoming Webhooksを利用していきます。これまで，Incoming Webhooksを「Webhook URLに投稿したい内容を持ったHTTPリクエストを送ると，Slack にメッセージが投稿できる」と説明していました。ここからは「投稿したい内容を持ったHTTPリクエスト」を送る具体的な方法について説明していきます。
+ここから本格的にGoogle Apps Script上でIncoming Webhooksを利用していきます。これまで，Incoming Webhooksを「Webhook URLに投稿したい内容を持ったHTTPリクエストを送ると，Slack にメッセージが投稿できる」と説明していました。ここからは「投稿したい内容を持ったHTTPリクエスト」を送る具体的な方法について説明します。
 
 Google Apps Scriptでは，\href{https://developers.google.com/apps-script/reference/url-fetch/url-fetch-app}{UrlFetchApp}というクラスでHTTPリクエストを行います。このクラスでは，ウェブを介したHTTPリクエストと，そのレスポンスの取得が行えます。HTTPリクエストを送るには，\href{https://developers.google.com/apps-script/reference/url-fetch/url-fetch-app#fetchurl,-params}{UrlFetchApp.fetch(url, params)}を使用します。今回，リクエストを送る先のURLはWebhook URLに対応しますので，\verb|url|引数にはこれを入力します。\verb|param|引数については後述します。
 
 
-さて，リクエストを受け取る側（Slackのサーバー）もプログラムで動いていますので，闇雲にHTTPリクエストを送ってもサーバー側は解釈できません。リクエストの形式には決まり（プロトコル）が定められています。2019年現在，Webサービスの提供するWeb APIの多くはJSONを受け取り，JSONを返すように作られています。Incoming Webhooksでも，送信したい内容のJSONを送ることで，Slackのサーバー側が正しく解釈でき，メッセージを投稿できます。
+さて，リクエストを受け取る側（Slackのサーバー）もプログラムで動いていますので，闇雲にHTTPリクエストを送ってもサーバー側は解釈できません。リクエストの形式には決まり（プロトコル）が定められています。2021年現在，Webサービスの提供するWeb APIの多くはJSONを受け取り，JSONを返すように作られています。Incoming Webhooksでも，送信したい内容のJSONを送ることで，Slackのサーバー側が正しく解釈でき，メッセージを投稿できます。
 
 
 Incoming Webhooksに渡すJSONのうち，最も単純なものは以下に示すような「投稿したいメッセージ」のみを持ったJSONです。これをWebhook URLに対して送ると，デフォルトのSlackチャンネルにメッセージが送信されます。
@@ -475,10 +481,10 @@ Slackのサーバー側へ命令を送る際の決まりは，JSONで送るこ�
 \end{itemize}
 
 
-まず，「送ります」は\verb|POST|というリクエストメソッドに対応します。ここでは\verb|method|に\verb|POST|を指定すればいいんだなー程度で大丈夫です。リクエストメソッドについて気になる方は各自調べていただければと思います。HTTPリクエストメソッドには他に\verb|GET, PUT, DELETE|などがあり，Web APIではこれらのメソッドによってサービスに対する操作を区別することが多いです。
+まず，「送ります」は\verb|POST|というリクエストメソッドに対応します。ここでは\verb|method|に\verb|POST|を指定すればいいんだなー程度の認識で大丈夫です。リクエストメソッドについて気になる方は各自調べていただければと思います。HTTPリクエストメソッドには他に\verb|GET, PUT, DELETE|などがあり，Web APIではこれらのメソッドによってサービスやデータ，リソースに対する操作を区別することが多いです。
 
 
-「JSON形式」を宣言するには，リクエストヘッダに\verb|Content-type|を指定します。JSON形式に対応する\verb|Content-type|は\verb|application/json|です。リクエストヘッダについて気になる方は（以下略）
+「JSON形式」を宣言するには，リクエストヘッダに\verb|Content-type|を指定します。JSON形式に対応する\verb|Content-type|は\verb|application/json|です。リクエストヘッダについて気になる方は各自調べていただければと思います。
 
 
 したがって，以下のような形式になります。
@@ -490,16 +496,16 @@ Slackのサーバー側へ命令を送る際の決まりは，JSONで送るこ�
 }
 \end{lstlisting}
 
-さて，あとはソースコード\ref{jsonpayload}に示したJSONオブジェクト(実際にAPIに対して渡すデータ)を\verb|params|引数に含めれば，\verb|params|に渡すべきオブジェクトは完成します。これは，\verb|payload|パラメータに設定するのですが，\verb|payload|パラメータに設定できるのは文字列のみです。そこで，先のJSONオブジェクト全体を文字列に変換する必要があります。これは，JavaScript組み込みの\verb|JSON.stringify|という関数で変換できます。あるJSONオブジェクト\verb|obj|をJSON文字列に変換するには，この関数に\verb|obj|を渡してやればよいので，\verb|JSON.stringify(obj)|となります。したがって，スクリプト全体は以下のようになります。\verb|your/webhook/url|の部分は実際に取得したWebhook URLを入力します。
+さて，あとはソースコード\ref{jsonpayload}に示したJSONオブジェクト(実際にAPIに対して渡すデータ)を\verb|params|引数に含めれば，\verb|params|に渡すべきオブジェクトは完成します。これは\verb|payload|パラメータに設定するのですが，\verb|payload|パラメータに設定できるのは文字列のみです。そこで，先のJSONオブジェクト全体を文字列に変換する必要があります。これは，JavaScriptにある\verb|JSON.stringify|という関数で変換できます。あるJSONオブジェクト\verb|obj|をJSON文字列に変換するには，この関数に\verb|obj|を渡してやればよいので，\verb|JSON.stringify(obj)|となります。したがって，スクリプト全体は以下のようになります。\verb|your/webhook/url|の部分は実際に取得したWebhook URLを入力します。
 
-\begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=Incoming Webhooks Sample]
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=Incoming Webhook Sample]
 function slackSender() {
   
-  var payload = {
+  const payload = {
     "text": "This is the message"
   }
   
-  var options = {
+  const options = {
     "method": "POST",
     "headers": {"Content-type": "application/json"},
     "payload": JSON.stringify(payload)
@@ -523,7 +529,7 @@ function slackSender() {
 \subsection{いろいろなPayloadの作成と実行例}
 
 
-前節では，\verb|text|に単純な文字列を指定して，シンプルなメッセージ投稿を行いました。しかし，Incoming Webhooksでは，通常私たちがSlackの画面から投稿するよりもリッチな投稿ができます。この節ではその例について紹介します。
+前節では，\verb|text|に単純な文字列を指定して，シンプルなメッセージ投稿を行いました。しかし，Incoming Webhookでは，通常私たちがSlackの画面から投稿するよりもリッチな投稿ができます。この節ではその例について紹介します。
 
 \subsubsection{mrkdwn記法}
 
@@ -558,7 +564,7 @@ function slackSender() {
 
 \subsubsection{メンション}
 
-前項では，Slackの画面から通常通りメッセージを投稿するように，Incoming Webhooksでもメッセージの装飾ができることを紹介しました。一方，\verb|@here|，\verb|@channel|，\verb|@everyone|を含む，メンションには少し注意が必要です。
+前項では，Slackの画面からメッセージを投稿するように，Incoming Webhooksでもメッセージの装飾ができることを紹介しました。一方，\verb|@here|，\verb|@channel|，\verb|@everyone|を含む，メンションには少し注意が必要です。
 
 
 たとえば，私（\verb|@hitsumabushi845|）にメンションを飛ばそうと思い，以下のようなpayloadを作成したとします。
@@ -578,7 +584,7 @@ function slackSender() {
  \label{fig:mention1}
 \end{figure}
 
-これを正しくメンションとして表示するためには，以下のように\verb|@username|を\verb|<>|で囲む必要があります。なお，\verb|@username|を\verb|<>|で囲むメンションは〜〜
+これを正しくメンションとして表示するためには，以下のように\verb|@username|を\verb|<>|で囲む必要があります。
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=mention payload sample2,label=mrkdwnpayload]
 {
@@ -611,15 +617,12 @@ function slackSender() {
 \footnotetext{\verb|@everyone|はワークスペース全体が参加するチャンネル（\verb|#general, #random|など）でのみ使うことができます。}
 
 
-なお，\verb|username|を使ったメンションはSlack API経由では\href{https://api.slack.com/changelog/2017-09-the-one-about-usernames}{使用できません}（Incoming Webhooksでは可能）。
+なお，\verb|username|を使ったメンションはSlack API経由では\href{https://api.slack.com/changelog/2017-09-the-one-about-usernames}{使用できません}。2021年現在，Incoming Webhookでは\verb|username|でのメンションが許容されていますが，いずれIncoming Webhookでも利用できなくなります。
 
 \subsubsection{リンク}
 
 
-ここからは，通常私たちがSlackでメッセージを投稿する際には使えないが，Incoming Webhooksなら使える機能を紹介します。まずはリンクです。Incoming Webhooks経由のメッセージでは，文字列にリンクを埋め込むことができます。実際にIncoming Webhooksで文字列にリンクを埋め込む例を見てみましょう。
-
-
-以下のように，\verb+<{URL}|{リンクを埋め込みたい文字列}>+を投稿するpayloadに渡すと，Slack上では図\ref{fig:linked_text_sample}のように文字列にリンクが埋め込まれて表示されます。
+リンクも同様にIncoming Webhookからも送信できます。以下のように，\verb+<{URL}|{リンクを埋め込みたい文字列}>+を投稿するpayloadに渡すと，Slack上では図\ref{fig:linked_text_sample}のように文字列にリンクが埋め込まれて表示されます。
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=Link payload sample,label=linkpayload]
 {
@@ -638,7 +641,7 @@ function slackSender() {
 
 \subsubsection{Block Kit}
 
-2019年2月に登場した\textbf{Block Kit}を紹介します。Block Kitは，アプリケーションからSlackへ投稿するリッチなメッセージを組み立てるUIフレームワークです。フレームワークといっても，APIを介してメッセージを投稿する際の形式の一つですので，ライブラリのインストールなどといった環境構築は必要ありません。これまでと同様にpayloadに含めるだけで利用できます。
+次に，2019年2月に登場した\textbf{Block Kit}を紹介します。Block Kitは，アプリケーションからSlackへ投稿するリッチなメッセージを組み立てるUIフレームワークです。フレームワークといっても，APIを介してメッセージを投稿する際の形式の一つですので，いわゆる環境構築は必要ありません。これまでと同様にpayloadに含めるだけで利用できます。
 
 Block Kitを使うことで，図\ref{fig:block_kit_example}のような，複雑かつリッチなメッセージを組み立てることができます。ボタンや画像，区切り線に至るまで，すべてBlock Kitを使って構築されています。
 
@@ -664,7 +667,7 @@ Sectionとして表示されるよりもサイズが小さく，色が薄いテ�
 ボタンやセレクトボックス，日付セレクタなどのアクション要素。主にSlackとアプリケーション間の双方向通信が可能な場合に使用される。Incoming WebhooksはアプリケーションからSlackへの単方向通信なので，このテキストでは扱わない。
 \end{itemize}
 
-Block Kitは，これまでの\verb|text|のみのpayloadではなく，要素ごとにオブジェクトを作成し，それを格納したリストで表現されます。そのため，目的の見た目を実現するためにJSONを手入力で作成するのは骨が折れる作業です。SlackはBlock Kitのプロトタイピングツール\href{https://api.slack.com/tools/block-kit-builder}{Block Kit Builder}を提供しています。これは，GUIを用いてメッセージのひな形を作成できるツールです。
+Block Kitはこれまでの\verb|text|のみのpayloadではなく，要素ごとにオブジェクトを作成し，それらを組み合わせたリストで表現されます。しかし，所望の見た目を実現するためにJSONを手入力で作成するのは骨が折れる作業です。そこでSlackはBlock Kitのプロトタイピングツール\href{https://api.slack.com/tools/block-kit-builder}{Block Kit Builder}を提供しています。これはGUIを用いてメッセージのひな形を作成できるツールです。
 
 
 左カラムから追加したい要素を選ぶと，中央カラムにSlackに投稿された際のイメージが表示され，実際のJSONは右カラムに表示されます。右カラムのJSONは編集可能なので，デフォルトの文字列から変更したい場合はこちらを編集して変更します。そのため，Block Kitを利用する場合はBlock Kit Builderを使ってひな形を作り，ひな形をもとにプログラムに落とし込む，といったフローが最も簡単だと思います。
@@ -678,11 +681,11 @@ Block Kitは，これまでの\verb|text|のみのpayloadではなく，要素�
 
 \subsubsection{Attachments}
 
-Block Kitが登場するまで，このAttachmentsがリッチなメッセージを作成する手段でした。しかし，AttachmentsはBlock Kitの登場によって\textbf{Legacy}とされ，outmoded approach（廃れた手法)とまで記載されるようになってしまいました。
+前項で紹介したBlock Kitが登場するまで，このAttachmentsがリッチなメッセージを作成する手段でした。AttachmentsはBlock Kitの登場によって\textbf{Legacy}とされ，outmoded approach（廃れた手法)と記載されるようになってしまいました。
 
-しかし，AttachmentsにできてBlock Kitにはできないことが1つだけあります。それは，``メッセージの左側に色付きのバーを表示すること''です。Attachmentsには，Block Kit BuilderのようなGUIプロトタイピングツールは提供されていませんが，現在のAttachmentsはBlock Kitのラッパーとしても提供されており，Block Kitで作成した\verb|blocks|要素を\verb|attachments|の各要素に入れ込むだけでAttachmentsが利用できます。つまり，AttachmentsはBlock Kitで作成されたメッセージの左側に色付きのバーを追加する機能，として捉えるのがよさそうです。
+ただし，AttachmentsにできてBlock Kitにはできないことが1つだけあります。それは，``メッセージの左側に色付きのバーを表示すること''です。Attachmentsには，Block Kit BuilderのようなGUIプロトタイピングツールは提供されていませんが，現在のAttachmentsはBlock Kitのラッパーとしても提供されており，Block Kitで作成した\verb|blocks|要素を\verb|attachments|の各要素に入れ込むだけでAttachmentsが利用できます。つまり，AttachmentsはBlock Kitで作成されたメッセージの左側に色付きのバーを追加する機能，として捉えるのがよさそうです。
 
-Attachmentsは，オブジェクトのリストで提供されます。したがって，1つのAttachmentを投稿する場合は，以下のようなpayloadになります。
+AttachmentsもBlock Kitと同様，オブジェクトのリストで表現されます。1つのAttachmentを投稿する場合は，以下のようなpayloadになります。
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=Attachments payload sample]
 {
@@ -731,7 +734,7 @@ Attachmentsは，オブジェクトのリストで提供されます。したが
 
 GASにおけるGoogle FormsへのAPIは\verb|FormApp|というクラスで提供されます。\verb|FormApp|は，スクリプトによるフォームの作成，編集，そして参照の手段を提供します。つまり，フォームそのものに対する操作を提供するAPIとなります。実際にフォームから送信された回答を取得する手段は\verb|FormApp|は持っていません。これについては次節\ref{subsec:event_object}以降で扱います。
 
-普段私たちがGoogle Formsでフォームを作成するときはWeb画面からインタラクティブに作成することと思います。わざわざスクリプトを書いてフォームを作成・編集するメリットはイメージしづらいかもしれません。例えば，セレクトボックスの要素を何らかのスプレッドシートやデータベースに記録されている値から動的に生成したい場合などにおいて，スクリプトを用いたフォーム作成が効果を発揮します。ここでも，``Google Formsとスプレッドシート''といった，「異なるサービス間の連携」においてGoogle Apps Scriptが効果を発揮することがわかるかと思います。
+普段私たちがGoogle Formsでフォームを作成するときはWeb画面から作成することと思います。わざわざスクリプトを書いてフォームを作成・編集するメリットはイメージしづらいかもしれません。例えば，セレクトボックスの要素を何らかのスプレッドシートやデータベースに記録されている値から動的に生成したい場合などにおいて，スクリプトを用いたフォーム作成が効果を発揮します。ここでも，``Google Formsとスプレッドシート''といった，「異なるサービス間の連携」においてGoogle Apps Scriptが効果を発揮することがわかるかと思います。
 
 \subsubsection{FormAppを使ったフォーム作成}
 
@@ -749,7 +752,7 @@ function createForm() {
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=FormApp sample 2]
 function createForm() {
-  var form = FormApp.create("Sample Form");
+  const form = FormApp.create("Sample Form");
 }
 \end{lstlisting}
 
@@ -761,7 +764,7 @@ function createForm() {
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=FormApp sample 3]
 function createForm() {
-  var form = FormApp.create("Sample Form");
+  const form = FormApp.create("Sample Form");
   form.addParagraphTextItem()
 }
 \end{lstlisting}
@@ -796,7 +799,7 @@ function createForm() {
  \label{fig:form_sample1}
 \end{figure}
 
-さらに，セレクトボックス形式の質問を追加していきます。セレクトボックス回答形式の質問を追加するには，フォームに対して，\verb|addListItem()|を実行します。
+次に，セレクトボックス形式の質問を追加していきます。セレクトボックス回答形式の質問を追加するには，フォームに対して，\verb|addListItem()|を実行します。
 
 
 タイトルや説明の設定は，\verb|ParagraphTextItem|と同様に\verb|setTitle()|，\verb|setHelpText()|で行えます。セレクトボックスにアイテムを追加するのは\verb|ListItem.setChoiceValues()|が最も簡便な手法です。これは，文字列のリストをまとめてアイテムとして追加するメソッドです。
@@ -847,7 +850,9 @@ function createForm() {
   .setHelpText("This ListItem is automatically created by GAS.")
   .setChoiceValues(["hoge", "fuga", "foo", "bar"]);
   
+  // フォームの公開URLを表示する
   Logger.log(form.getPublishedUrl());
+  // フォームの編集URLを表示する
   Logger.log(form.getEditUrl());
 }
 \end{lstlisting}
@@ -864,7 +869,7 @@ function createForm() {
 \subsection{Google Appsに紐づくスクリプト}
 \label{subsec:event_object}
 
-前節では，FormAppを使ってスクリプトからフォームを作成する方法を紹介しました。本節では，既に作成されたフォームから回答が送信されたとき，それを受け取る方法について紹介します。今回は，前節で作成したフォーム(図\ref{fig:form_sample3})を引き続き使用します。
+前節では，FormAppを使ってスクリプトからフォームを作成する方法を紹介しました。本節では，フォームに送信された回答をGASで受け取る方法について紹介します。今回は，前節で作成したフォーム(図\ref{fig:form_sample3})を引き続き使用します。
 
 まず，フォーム編集画面右上にある，「\ $\mathbf{\vdots}$\ 」をクリックし，「スクリプト エディタ」を選択します。すると，スクリプト編集画面が開きます。これは，フォームに紐付いたスクリプトになりますので，以降はこちらからスクリプトを編集します。
 
@@ -1389,6 +1394,40 @@ Google Formsのスクリプトの際はイベントトリガを設定しまし�
 
 \clearpage
 \appendix
+
+\section{ワークスペースにIncoming Webhookをインストールする}
+\label{appendix:install incoming webhooks}
+
+ここでは，SlackワークスペースにIncoming Webhookをインストールする方法を説明します。
+
+\verb|https://{ワークスペース名}.slack.com/apps| にアクセスし，\verb|Incoming Webhooks|で検索します。
+
+\begin{figure}[H]
+ \centering
+ \includegraphics[keepaspectratio, scale=0.7]{images/search_incoming_webhook.png}
+ \caption{Incoming Webhookを検索する}
+ \label{fig:search_incoming_webhook}
+\end{figure}
+
+選択後，``\textbf{Slackに追加}''ボタンをクリックします。
+
+\begin{figure}[H]
+ \centering
+ \includegraphics[keepaspectratio, scale=0.7]{images/add_incoming_webhook.png}
+ \caption{Incoming Webhookを追加する}
+ \label{fig:add_incoming_webhook}
+\end{figure}
+
+カスタムインテグレーションには1つ以上の設定が必要ですので、追加後引き続きIncoming Webhookの設定を行います。
+Webhookで投稿する先のチャンネルを選択し，``\textbf{Incoming Webhookインテグレーションの追加}''ボタンをクリックします。
+
+\begin{figure}[H]
+ \centering
+ \includegraphics[keepaspectratio, scale=0.7]{images/configure_incoming_webhook.png}
+ \caption{Incoming Webhookを設定する}
+\end{figure}
+
+以上でIncoming Webhookのインストールは終了です。引き続き、設定したWebhookの詳細設定画面になりますので、必要に応じて表示名やアイコン等の設定を行ってください。
 
 \section{実装例}
 
