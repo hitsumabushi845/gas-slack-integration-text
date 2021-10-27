@@ -435,8 +435,8 @@ function slackSender() {
 
 \begin{figure}[H]
  \centering
- \includegraphics[keepaspectratio, scale=0.7]{images/standalone_gas1.png}
- \caption{GASツールバー}
+ \includegraphics[keepaspectratio, scale=0.6]{images/standalone_gas1.png}
+ \caption{スクリプトエディタ画面}
  \label{fig:standalone_gas1}
 \end{figure}
 
@@ -446,7 +446,7 @@ function slackSender() {
 
 \begin{figure}[H]
  \centering
- \includegraphics[keepaspectratio, scale=0.7]{images/standalone_gas2.png}
+ \includegraphics[keepaspectratio, scale=0.5]{images/standalone_gas2.png}
  \caption{ログ出力例}
  \label{fig:standalone_gas2}
 \end{figure}
@@ -502,7 +502,7 @@ Slackのサーバー側へ命令を送る際の決まりは，JSONで送るこ�
 function slackSender() {
   
   const payload = {
-    "text": "This is the message"
+    "text": "Sample message"
   }
   
   const options = {
@@ -546,9 +546,9 @@ function slackSender() {
  \label{fig:mrkdwn_sample}
 \end{figure}
 
-これはIncoming Webhooksでメッセージを投稿する場合も有効で，実際以下のソースコード\ref{mrkdwnpayload}のようなpayloadでメッセージを投稿すると，図\ref{fig:mrkdwn_payload1}のように表示されます。
+これはIncoming Webhooksでメッセージを投稿する場合も有効で，実際以下のソースコード\ref{mrkdwnsimplepayload}のようなpayloadでメッセージを投稿すると，図\ref{fig:mrkdwn_payload1}のように表示されます。
 
-\begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=mrkdwn payload sample,label=mrkdwnpayload]
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=mrkdwn payload sample,label=mrkdwnsimplepayload]
 {
   "text": "*This* is a _sample_ of `mrkdwn` ~notation~"
 }
@@ -569,13 +569,13 @@ function slackSender() {
 
 たとえば，私（\verb|@hitsumabushi845|）にメンションを飛ばそうと思い，以下のようなpayloadを作成したとします。
 
-\begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=mention payload sample1,label=mrkdwnpayload]
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=mention payload sample1,label=mrkdwnmentionpayloadfailed]
 {
   "text": "@hitsumabushi845 mention...?"
 }
 \end{lstlisting}
 
-このpayloadを使ってIncoming Webhooksでメッセージを投稿すると，以下のように正しくメンションにならず，\verb|@hitsumabbushi845|は単なる文字列として表示されてしまいます。
+このpayloadを使ってIncoming Webhooksでメッセージを投稿すると，以下のように正しくメンションにならず，\verb|@hitsumabushi845|は単なる文字列として表示されてしまいます。
 
 \begin{figure}[H]
  \centering
@@ -586,9 +586,9 @@ function slackSender() {
 
 これを正しくメンションとして表示するためには，以下のように\verb|@username|を\verb|<>|で囲む必要があります。
 
-\begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=mention payload sample2,label=mrkdwnpayload]
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=mention payload sample2,label=mrkdwnmentionpayloadsuccess]
 {
-  "text": "<@hitsumabushi845> mention!"
+  "text": "<@U02K3ESK37E> mention!"
 }
 \end{lstlisting}
 
@@ -711,9 +711,9 @@ AttachmentsもBlock Kitと同様，オブジェクトのリストで表現され
 
 \begin{figure}[H]
  \centering
- \includegraphics[keepaspectratio, scale=0.8]{images/attachments_sample3.png}
+ \includegraphics[keepaspectratio, scale=0.8]{images/attachments_sample.png}
  \caption{Attachmentsを使った投稿例}
- \label{fig:attachments_sample3}
+ \label{fig:attachments_sample}
 \end{figure}
 
 \section{Google FormsとGAS}
@@ -1404,7 +1404,7 @@ Google Formsのスクリプトの際はイベントトリガを設定しまし�
 
 \begin{figure}[H]
  \centering
- \includegraphics[keepaspectratio, scale=0.7]{images/search_incoming_webhook.png}
+ \includegraphics[keepaspectratio, scale=0.4]{images/search_incoming_webhook.png}
  \caption{Incoming Webhookを検索する}
  \label{fig:search_incoming_webhook}
 \end{figure}
@@ -1413,7 +1413,7 @@ Google Formsのスクリプトの際はイベントトリガを設定しまし�
 
 \begin{figure}[H]
  \centering
- \includegraphics[keepaspectratio, scale=0.7]{images/add_incoming_webhook.png}
+ \includegraphics[keepaspectratio, scale=0.4]{images/add_incoming_webhook.png}
  \caption{Incoming Webhookを追加する}
  \label{fig:add_incoming_webhook}
 \end{figure}
@@ -1423,7 +1423,7 @@ Webhookで投稿する先のチャンネルを選択し，``\textbf{Incoming Web
 
 \begin{figure}[H]
  \centering
- \includegraphics[keepaspectratio, scale=0.7]{images/configure_incoming_webhook.png}
+ \includegraphics[keepaspectratio, scale=0.4]{images/configure_incoming_webhook.png}
  \caption{Incoming Webhookを設定する}
 \end{figure}
 
