@@ -96,14 +96,14 @@ setpagesize=false,
 
 \section{はじめに}
 
-こんにちは。hitsumabushi845 です。2019年冬に私の勤務している株式会社 Works Human Intelligence にて全4回ほど実施していた Google Apps Script $\times$ Slack 講座の内容を大幅な加筆とともにテキストにしました。
+こんにちは。hitsumabushi845 です。2019年冬に私の勤務先にて全4回ほど実施していた Google Apps Script $\times$ Slack 講座の内容を大幅な加筆とともにテキストにしました。
 
 
 会社で行った講座ではスライドを使ったハンズオン形式で実施していましたが，テキストにするにあたり改めて構成を整理しなおし，ハンズオンで行っていた部分は練習問題として各章の最後に掲載しています。練習問題以外の部分でも，写経を通して少しずつ手を動かして確認できるよう意識しています。なお，本文中の\href{http://google.co.jp}{赤文字}になっているところには対応する Web サイトへのリンクが埋め込まれています。必要に応じて参照してください。
 
 \subsection{対象読者}
 
-本書は主に以下を対象としています。Google Apps ScriptはJavaScriptベースのスクリプト言語です。本テキストではJavaScriptの文法の詳細については触れません。本テキストでは基本的なデータ型，条件分岐，ループ程度しか扱いませんので，JavaScript自体に自信のない方は\href{https://jsprimer.net/}{JavaScript Primer} 等のウェブサイトを参照することをおすすめします。
+本書は主に以下を対象としています。Google Apps ScriptはJavaScriptベースのスクリプト言語です。本テキストではJavaScriptの文法の詳細については触れません。本テキストでは基本的なデータ型，条件分岐，ループ程度しか扱いませんので，JavaScript自体に自信のない方は\href{https://jsprimer.net/}{JavaScript Primer} 等のWebサイトを参照することをおすすめします。
 
 \begin{itemize}
 \item プログラミング初級者程度の知識があり，なにか作ってみたい人
@@ -121,12 +121,12 @@ setpagesize=false,
 \subsection{Google Apps Scriptとは}
 \label{subsec:About GAS}
 
-\href{https://developers.google.com/apps-script/}{Google Apps Script（GAS）} は，G Suite上にある軽量スクリプトプラットフォーム（FaaS）です。\textbf{G Suite上にある}というのがポイントで，Google SpreadsheetsやGoogle Docs，GmailなどといったGoogle Appsとの親和性が高いことが特徴です。スクリプトからGoogle Apps上のデータを操作したり，逆にGoogle Appsからスクリプトを実行したりと，Google Appsとスクリプトをシームレスに連携することができます。
+\href{https://developers.google.com/apps-script/}{Google Apps Script（GAS）} は，Google Workspace上にある軽量スクリプトプラットフォーム（FaaS）です。\textbf{Google Workspace上にある}というのがポイントで，Google SpreadsheetsやGoogle Docs，GmailなどといったGoogle Appsとの親和性が高いことが特徴です。スクリプトからGoogle Apps上のデータを操作したり，逆にGoogle Appsからスクリプトを実行したりと，Google Appsとスクリプトをシームレスに連携することができます。
 
-一方で，サービスとしてのスクリプト実行環境であるため，スクリプトの呼び出し回数やAPIの実行時間に\href{https://developers.google.com/apps-script/guides/services/quotas}{制限があります}。したがって，いわゆるバッチ処理などといった，時間のかかる処理をGAS上で行うのは現実的ではありません。
+ただし，サービスとしてのスクリプト実行環境であるため，スクリプトの呼び出し回数やAPIの実行時間に\href{https://developers.google.com/apps-script/guides/services/quotas}{制限があります}。したがって，いわゆるバッチ処理などといった，時間のかかる処理をGAS上で行うのは現実的ではありません。
 
 
-GASの画面には，\href{https://script.google.com/home}{https://script.google.com/home} からアクセスできます（図\ref{fig:gas_main}）。
+GASのホーム画面には，\href{https://script.google.com/home}{https://script.google.com/home} からアクセスできます（図\ref{fig:gas_main}）。
 \begin{figure}[H]
  \centering
  \includegraphics[keepaspectratio, scale=0.4]{images/gas_main.png}
@@ -134,7 +134,7 @@ GASの画面には，\href{https://script.google.com/home}{https://script.google
  \label{fig:gas_main}
 \end{figure}
 
-画面左上にある「新しいプロジェクト」ボタンをクリックすると，図\ref{fig:gas_edit}に示すようなエディタ画面が表示されます。Google Apps Scriptはこの画面上でプログラミングを行います\footnote{ローカルでの開発を可能にする\href{https://github.com/google/clasp}{Clasp}というツールもありますが，本テキストでは扱いません。}。
+画面左上にある「新しいプロジェクト」ボタンをクリックすると，図\ref{fig:gas_edit}に示すようなエディタ画面が表示されます。GASではこの画面上でプログラミングを行います\footnote{ローカルでの開発を可能にする\href{https://github.com/google/clasp}{Clasp}というツールもありますが，本テキストでは扱いません。}。
 
 \begin{figure}[H]
  \centering
@@ -144,8 +144,8 @@ GASの画面には，\href{https://script.google.com/home}{https://script.google
 \end{figure}
 
 
-ここで，なぜ本書はGAS単体でのHOW-TOでなくSlackとの連携を主題に置いているか，といった点にも触れておきたいと思います。
-GASはG Suiteを活用する上で非常に強力なツールですが，各Google Apps自身の持つ機能については意識したほうがよいでしょう。というのも，各Google Appsそれ自体にも多くの機能が備わっており，場合によってはスクリプトを書くまでもなくGoogle Apps自体の機能で目的を実現できるからです。
+ここで「なぜ本書はGAS単体でのHOW-TOでなくSlackとの連携を主題に置いているのか」といった点にも触れておきたいと思います。
+GASはGoogle Workspaceを活用する上で非常に強力なツールですが，各Google Apps自身の持つ機能については意識したほうがよいでしょう。というのも，各Google Appsそれ自体にも多くの機能が備わっており，スクリプトを書くまでもなくGoogle Apps自体の機能で目的を実現できることもあるからです。
 
 例として，「Google Spreadsheetsに入力された日本語の文章を英語に翻訳する」といったケースを考えてみます。先程説明したように，GASは各種Google Appsとシームレスに連携することができ，この連携できるサービスにはGoogle SpreadsheetsとGoogle Translateもそれぞれ含まれています。したがって，
 \begin{enumerate}
@@ -172,19 +172,19 @@ function translateSample() {
  \end{lstlisting}
 
 
-さて，このようなケースでGASを用いるのは本当にベストな選択でしょうか？実は，Google Spreadsheetsには\href{https://support.google.com/docs/answer/3093331?hl=ja}{GOOGLETRANSLATEという関数が用意されています}。したがって，そもそもスクリプトを書く必要すらなく，Google Spreadsheetsの持つ機能だけで行いたかったことは実現できます\footnote{``翻訳の質''という観点で考えると，GASを用いた方法のほうが良い場合もあります。実際には実装コストと併せて考える必要があると思います。see also: \href{https://qiita.com/kazinoue/items/82779a11af8a2dea0d21}{https://qiita.com/kazinoue/items/82779a11af8a2dea0d21}}。
+しかし実は，Google Spreadsheetsには\href{https://support.google.com/docs/answer/3093331?hl=ja}{GOOGLETRANSLATEという関数が用意されています}。したがって，そもそもスクリプトを書く必要すらなく，Google Spreadsheetsの持つ機能だけで行いたかったことは実現できます\footnote{``翻訳の質''という観点で考えると，GASを用いた方法のほうが良い場合もあります。実際には実装コストと併せて考える必要があると思います。see also: \href{https://qiita.com/kazinoue/items/82779a11af8a2dea0d21}{https://qiita.com/kazinoue/items/82779a11af8a2dea0d21}}。
 
 
-上記の例ではGoogle SpreadsheetsとGoogle Translateの連携がGoogle Spreadsheetsだけで可能であることを説明しました。しかし，一般的には複数のGoogle Appsを組み合わせた処理はそれほど機能として用意されていません。なので，\textbf{複数のGoogle Appsを連携させる}用途，\textbf{Google Appsと外部サービスのAPIを連携させる}用途などではGASが効果を発揮する可能性が高いです。そのため，本テキストでも\textbf{Slackとの連携}を主軸に置いています。
+上記の例ではGoogle SpreadsheetsとGoogle Translateの連携はGoogle Spreadsheetsだけで可能であることを説明しました。しかし，一般的には複数のGoogle Appsを組み合わせた処理はそれほど機能として用意されていません。よって，\textbf{複数のGoogle Appsを連携させる}用途，\textbf{Google Appsと外部サービスのAPIを連携させる}用途などにおいてはGASが効果を発揮する可能性が高いです。そのため，本テキストでも\textbf{Slackとの連携}を主軸に置いています。
 
 \clearpage
-\subsection{Incoming Webhook とは}
+\subsection{Incoming Webhookとは}
 
 \href{https://api.slack.com/messaging/webhooks}{Incoming Webhook}はアプリケーションやプログラムからSlackにメッセージを投稿する方法(API)のひとつです。Webhook URLと呼ばれるURLに，投稿したい内容を持ったHTTPリクエストを送ると，Slack にメッセージが投稿されます。
 
 \begin{itembox}[l]{Column: APIとは}
 
-API;Application Programming Interface とは，以下のように\href{http://e-words.jp/w/API.html}{説明されます}。
+API;Application Programming Interfaceとは，以下のように\href{http://e-words.jp/w/API.html}{説明されます}。
 
 \begin{quote}
 \textbf{API}とは、あるコンピュータプログラム（ソフトウェア）の機能や管理するデータなどを、外部の他のプログラムから呼び出して利用するための手順やデータ形式などを定めた規約のこと。
@@ -440,7 +440,7 @@ function slackSender() {
  \label{fig:standalone_gas1}
 \end{figure}
 
-初めての実行時，\textbf{Authorization required}といったタイトルのダイアログが表示されます。これは，「このスクリプトを実行していいですか？」という確認と，それをユーザーのG Suiteアカウントから承認するダイアログです。画面の指示に従って承認してください。詳しくは，\href{https://tonari-it.com/gas-script-approval/}{こちら}のウェブサイトが詳しいので，必要に応じて参照してください。
+初めての実行時，\textbf{Authorization required}といったタイトルのダイアログが表示されます。これは，「このスクリプトを実行していいですか？」という確認と，それをユーザーのGoogle Workspaceアカウントから承認するダイアログです。画面の指示に従って承認してください。詳しくは，\href{https://tonari-it.com/gas-script-approval/}{こちら}のウェブサイトが詳しいので，必要に応じて参照してください。
 
 実行すると，自動的にログが画面下部に表示されます。ログはツールバーの\textbf{実行ログ}をクリックするか，\verb|Ctrl(Cmd)+Enter|でも表示できます。正常に実行できていれば，以下の図\ref{fig:standalone_gas2}のようにログが出力されています。
 
@@ -454,22 +454,22 @@ function slackSender() {
 \subsubsection{UrlFetchAppとWeb APIへのHTTPリクエスト}
 
 
-ここから本格的にGoogle Apps Script上でIncoming Webhookを利用していきます。これまで，Incoming Webhookを「Webhook URLに投稿したい内容を持ったHTTPリクエストを送ると，Slack にメッセージが投稿できる」と説明していました。ここからは「投稿したい内容を持ったHTTPリクエスト」を送る具体的な方法について説明します。
+ここから本格的にGoogle Apps Script上でIncoming Webhookを利用していきます。これまで，Incoming Webhookを「Webhook URLに投稿したい内容を持ったHTTPリクエストを送ると，Slackにメッセージが投稿できる」と説明していました。ここからは「投稿したい内容を持ったHTTPリクエスト」を送る具体的な方法について説明します。
 
-Google Apps Scriptでは，\href{https://developers.google.com/apps-script/reference/url-fetch/url-fetch-app}{UrlFetchApp}というクラスでHTTPリクエストを行います。このクラスでは，ウェブを介したHTTPリクエストと，そのレスポンスの取得が行えます。HTTPリクエストを送るには，\href{https://developers.google.com/apps-script/reference/url-fetch/url-fetch-app#fetchurl,-params}{UrlFetchApp.fetch(url, params)}を使用します。今回，リクエストを送る先のURLはWebhook URLに対応しますので，\verb|url|引数にはこれを入力します。\verb|param|引数については後述します。
-
-
-さて，リクエストを受け取る側（Slackのサーバー）もプログラムで動いていますので，闇雲にHTTPリクエストを送ってもサーバー側は解釈できません。リクエストの形式には決まり（プロトコル）が定められています。2021年現在，Webサービスの提供するWeb APIの多くはJSONをやり取りするように作られています。Incoming Webhookでも，送信したい内容のJSONを送ることで，Slackのサーバー側が正しく解釈でき，メッセージを投稿できます。
+Google Apps Scriptでは，\href{https://developers.google.com/apps-script/reference/url-fetch/url-fetch-app}{UrlFetchApp}というクラスでHTTPリクエストを行います。このクラスではHTTPリクエストとそのレスポンスの取得が行えます。HTTPリクエストを送るには，\href{https://developers.google.com/apps-script/reference/url-fetch/url-fetch-app#fetchurl,-params}{UrlFetchApp.fetch(url, params)}を使用します。今回，リクエストを送る先のURLはWebhook URLに対応するので，\verb|url|引数にはこれを入力します。\verb|param|引数については後述します。
 
 
-Incoming Webhookに渡すJSONのうち，最も単純なものは以下に示すような「投稿したいメッセージ」のみを持ったJSONです。これをWebhook URLに対して送ると，デフォルトのSlackチャンネルにメッセージが送信されます。
+さて，リクエストを受け取る側（Slackのサーバー）もプログラムで動いていますので，ただ闇雲にHTTPリクエストを送ってもサーバー側は解釈できません。リクエストの形式には決まり（プロトコル）が定められています。2021年現在，Webサービスの提供するWeb APIの多くはJSONをやり取りするように作られています。Incoming Webhookでも，送信したい内容のJSONを送ることで，Slackのサーバー側が正しく解釈でき，メッセージが投稿されます。
+
+
+Incoming Webhookに渡すJSONのうち，最も単純なものは以下に示すような「投稿したいメッセージ」のみを持ったJSONです。これをWebhook URLに対して送ると，Incoming Webhookの設定時に指定したデフォルトのSlackチャンネルにメッセージが送信されます。
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=Minimum JSON payload for Incoming Webhook,label=jsonpayload]
 {
   "text": "This is the message"
 }
 \end{lstlisting}
 
-Slackのサーバー側へ命令を送る際の決まりは，JSONで送ることでしたが，その「送る」を担う\textbf{HTTPリクエスト}にも決まりが存在します。この「決まり」に即してパラメータを設定する部分が，冒頭で紹介した\verb|UrlFetchApp.fetch(url, params)|の\verb|params|引数に対応します。ここで必要になるのは，「JSON形式でこの(上記のJSON)データを送りますよ」ということの宣言です。この宣言は，以下のように分割することができ，またそれぞれが\verb|params|引数のパラメータに対応します。
+Slackのサーバー側へ命令を送る際の決まりはJSONで送ることでしたが，その「送る」を担う\textbf{HTTPリクエスト}にも決まりが存在します。この「決まり」に即してパラメータを設定する部分が，冒頭で紹介した\verb|UrlFetchApp.fetch(url, params)|の\verb|params|引数に対応します。ここで必要になるのは，「JSON形式でこの(上記のJSON)データを送りますよ」ということの宣言です。この宣言は，以下のように分割することができ，またそれぞれが\verb|params|引数のパラメータに対応します。
 
 \begin{itemize}
 \item JSON形式で\\
@@ -481,13 +481,13 @@ Slackのサーバー側へ命令を送る際の決まりは，JSONで送るこ�
 \end{itemize}
 
 
-まず，「送ります」は\verb|POST|というリクエストメソッドに対応します。ここでは\verb|method|に\verb|POST|を指定すればいいんだなー程度の認識で大丈夫です。リクエストメソッドについて気になる方は各自調べていただければと思います。HTTPリクエストメソッドには他に\verb|GET, PUT, DELETE|などがあり，Web APIではこれらのメソッドによってサービスやデータ，リソースに対する操作を区別することが多いです。
+まず，「送ります」は\verb|POST|というリクエストメソッドに対応します。ここでは\verb|method|に\verb|POST|を指定すればいいんだなー程度の認識で大丈夫です。リクエストメソッドについて気になる方は各自調べていただければと思います。HTTPリクエストメソッドには他に\verb|GET, PUT, DELETE|などがあり，Web APIでは基本的にこれらのメソッドを使い分けることによって対象のサービスやデータ，リソースに対する操作を区別します。
 
 
 「JSON形式」を宣言するには，リクエストヘッダに\verb|Content-type|を指定します。JSON形式に対応する\verb|Content-type|は\verb|application/json|です。リクエストヘッダについても気になる方は各自調べていただければと思います。
 
 
-したがって，以下のような形式になります。
+ここまでに説明した内容を\verb|params|に落とし込むと以下のような形式になります。
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=params argument for UrlFetchApp]
 {
@@ -496,7 +496,7 @@ Slackのサーバー側へ命令を送る際の決まりは，JSONで送るこ�
 }
 \end{lstlisting}
 
-さて，あとはソースコード\ref{jsonpayload}に示したJSONオブジェクト(実際にAPIに対して渡すデータ)を\verb|params|引数に含めれば，\verb|params|に渡すべきオブジェクトは完成します。これは\verb|payload|パラメータに設定するのですが，\verb|payload|パラメータに設定できるのは文字列のみです。そこで，先のJSONオブジェクト全体を文字列に変換する必要があります。これは，JavaScriptにある\verb|JSON.stringify|という関数で変換できます。あるJSONオブジェクト\verb|obj|をJSON文字列に変換するには，この関数に\verb|obj|を渡してやればよいので，\verb|JSON.stringify(obj)|となります。したがって，スクリプト全体は以下のようになります。\verb|your/webhook/url|の部分は実際に取得したWebhook URLを入力します。
+さて，あとはソースコード\ref{jsonpayload}に示したオブジェクト(実際にAPIに対して渡すデータ)を\verb|params|に含めれば，\verb|params|に渡すべきオブジェクトは完成します。これは\verb|payload|パラメータに設定するのですが，\verb|payload|パラメータに設定できるのは文字列のみです。そこで，先のオブジェクト全体を文字列に変換する必要があります。これは，JavaScriptの\verb|JSON.stringify|という関数で変換できます。あるオブジェクト\verb|obj|をJSON文字列に変換するには，この関数に\verb|obj|を渡してやればよいので，\verb|JSON.stringify(obj)|となります。したがって，スクリプト全体は以下のようになります。\verb|your/webhook/url|の部分は実際に取得したWebhook URLを入力します。
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=Incoming Webhook Sample]
 function slackSender() {
@@ -529,12 +529,12 @@ function slackSender() {
 \subsection{いろいろなPayloadの作成と実行例}
 
 
-前節では，\verb|text|に単純な文字列を指定して，シンプルなメッセージ投稿を行いました。しかし，Incoming Webhookでは，通常私たちがSlackの画面から投稿するよりもリッチな投稿ができます。この節ではその例について紹介します。
+前節では，\verb|text|に単純な文字列を指定して，シンプルなメッセージ投稿を行いました。しかし，Incoming Webhookでは，通常私たちがSlackの画面から投稿するよりも多彩な表現を持った投稿ができます。本節ではその例について紹介します。
 
 \subsubsection{mrkdwn記法}
 
 
-通常私たちがSlackのメッセージを投稿するときも使用できるように，SlackにはMarkdownに似た記法でテキストの装飾ができます。この記法を\textbf{mrkdwn}と呼びます。
+私たちがSlackのメッセージを投稿するときと同様，SlackにはMarkdownに似た記法でテキストの装飾ができます。この記法を\textbf{mrkdwn}と呼びます。
 
 
 たとえば，図\ref{fig:mrkdwn_sample}に示すように，\verb|*bold*|と文字列を\verb|*|で囲むと，囲まれた文字列が太字になったり，\verb|`code`|と文字列を\verb|`|(バッククオート)で囲むと，囲まれた文字列がコードテキストになったりするものです。
@@ -564,7 +564,7 @@ function slackSender() {
 
 \subsubsection{メンション}
 
-前項では，Slackの画面からメッセージを投稿するように，Incoming Webhookでもメッセージの装飾ができることを紹介しました。一方，\verb|@here|，\verb|@channel|，\verb|@everyone|を含む，メンションには少し注意が必要です。
+前項では，Slackの画面からメッセージを投稿する際と同様，Incoming Webhookでもメッセージの装飾ができることを紹介しました。一方，\verb|@here|，\verb|@channel|，\verb|@everyone|を含む，メンションには少し注意が必要です。
 
 
 たとえば，私（\verb|@hitsumabushi845|）にメンションを飛ばそうと思い，以下のようなpayloadを作成したとします。
@@ -584,7 +584,7 @@ function slackSender() {
  \label{fig:mention1}
 \end{figure}
 
-これを正しくメンションとして表示するためには，以下のように\verb|@UserID|を\verb|<>|で囲む必要があります。\verb|UserID|とは，Slackのワークスペース内にいる各ユーザに割り当てられている英数文字列のIDです。\verb|UserID|はSlackからユーザのプロフィールを開くことで確認できます。
+これを正しくメンションとして表示するためには，以下のように\verb|@UserID|を\verb|<>|で囲む必要があります。\verb|UserID|とは，Slackのワークスペース内に所属する各ユーザに対して一意に割り当てられている英数文字列のIDです。\verb|UserID|はSlackからユーザのプロフィールを開くことで確認できます。
 
 \begin{figure}[H]
  \centering
@@ -610,7 +610,7 @@ function slackSender() {
  \label{fig:mention2}
 \end{figure}
 
-\verb|@here|，\verb|@channel|，\verb|@everyone|も\verb|<@here>|，\verb|<@channel>|，\verb|<@everyone>|などの特殊なメンションは，\verb|<!here>|，\verb|<!channel>|，\verb|<!everyone>|で送信できます。
+\verb|@here|，\verb|@channel|，\verb|@everyone|などの特殊なメンションについては，\verb|<!here>|，\verb|<!channel>|，\verb|<!everyone>|とすることで送信できます。
 
 \begin{table}[H]
   \caption{Incoming Webhookでのメンション対応表}
@@ -628,7 +628,7 @@ function slackSender() {
 \subsubsection{リンク}
 
 
-リンクも同様にIncoming Webhookからも送信できます。以下のように，\verb+<{URL}|{リンクを埋め込みたい文字列}>+を投稿するpayloadに渡すと，Slack上では図\ref{fig:linked_text_sample}のように文字列にリンクが埋め込まれて表示されます。
+リンクも同様にIncoming Webhookから送信できます。以下のように，\verb+<{URL}|{リンクを埋め込みたい文字列}>+を投稿するpayloadに渡すと，Slack上では図\ref{fig:linked_text_sample}のように文字列にリンクが埋め込まれて表示されます。
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=Link payload sample,label=linkpayload]
 {
@@ -643,11 +643,11 @@ function slackSender() {
  \label{fig:linked_text_sample}
 \end{figure}
 
-文字列にリンクを埋め込む必要がなく，URLをそのまま投稿する形で良ければ，特に\verb|<>|で囲む必要もなく，URLをそのまま\verb|text|の文字列に含めてしまえば大丈夫です。
+文字列にリンクにする必要がなく，URL自体をそのまま投稿する形で良ければ，\verb|<>|で囲む必要もなくURLをそのまま\verb|text|の文字列に含めると自動的にリンクとして展開されます。
 
 \subsubsection{Block Kit}
 
-次に，2019年2月に登場した\textbf{Block Kit}を紹介します。Block Kitは，アプリケーションからSlackへ投稿するリッチなメッセージを組み立てるUIフレームワークです。フレームワークといっても，APIを介してメッセージを投稿する際の形式の一つですので，いわゆる環境構築は必要ありません。これまでと同様にpayloadに含めるだけで利用できます。
+次に，2019年2月に登場した\textbf{Block Kit}を紹介します。Block Kitは，アプリケーションからSlackへ投稿するためのリッチなメッセージを組み立てるUIフレームワークです。
 
 Block Kitを使うことで，図\ref{fig:block_kit_example}のような，複雑かつリッチなメッセージを組み立てることができます。ボタンや画像，区切り線に至るまで，すべてBlock Kitを使って構築されています。
 
@@ -670,7 +670,7 @@ Sectionとして表示されるよりもサイズが小さく，色が薄いテ�
 \item Divider\\
 分割線。
 \item Actions\\
-ボタンやセレクトボックス，日付セレクタなどのアクション要素。主にSlackとアプリケーション間の双方向通信が可能な場合に使用される。Incoming WebhookはアプリケーションからSlackへの単方向通信なので，このテキストでは扱わない。
+ボタンやセレクトボックス，日付セレクタなどのアクション要素。Slackとアプリケーション間の双方向通信が可能な場合に使用される。Incoming WebhookはアプリケーションからSlackへの単方向通信なので，このテキストでは扱わない。
 \end{itemize}
 
 Block Kitはこれまでの\verb|text|のみのpayloadではなく，要素ごとにオブジェクトを作成し，それらを組み合わせたリストで表現されます。しかし，所望の見た目を実現するためにJSONを手入力で作成するのは骨が折れる作業です。そこでSlackはBlock Kitのプロトタイピングツール\href{https://api.slack.com/tools/block-kit-builder}{Block Kit Builder}を提供しています。これはGUIを用いてメッセージのひな形を作成できるツールです。
@@ -687,9 +687,11 @@ Block Kitはこれまでの\verb|text|のみのpayloadではなく，要素ご�
 
 \subsubsection{Attachments}
 
-前項で紹介したBlock Kitが登場するまで，このAttachmentsがリッチなメッセージを作成する手段でした。AttachmentsはBlock Kitの登場によって\textbf{Legacy}とされ，outmoded approach（廃れた手法)と記載されるようになってしまいました。
+最後に，Attachmentsを紹介します。前項で紹介したBlock Kitが登場するまで，このAttachmentsがリッチなメッセージを作成する手段でした。しかし，Block Kitの登場によってAttachmentsは\textbf{Legacy}とされ，outmoded approach（廃れた手法)と記載されるようになってしまいました。
 
-ただし，AttachmentsにできてBlock Kitにはできないことが1つだけあります。それは，``メッセージの左側に色付きのバーを表示すること''です。Attachmentsには，Block Kit BuilderのようなGUIプロトタイピングツールは提供されていませんが，現在のAttachmentsはBlock Kitのラッパーとしても提供されており，Block Kitで作成した\verb|blocks|要素を\verb|attachments|の各要素に入れ込むだけでAttachmentsが利用できます。つまり，AttachmentsはBlock Kitで作成されたメッセージの左側に色付きのバーを追加する機能，として捉えるのがよさそうです。
+ただし，AttachmentsにできてBlock Kitにはできないことが1つだけあります。それは，``メッセージの左側に色付きのバーを表示すること''です。Attachmentsには，Block Kit BuilderのようなGUIプロトタイピングツールは提供されていませんが，現在のAttachmentsはBlock Kitのラッパーとしても提供されており，Block Kitで作成した\verb|blocks|要素を\verb|attachments|の各要素に入れ込むだけでAttachmentsが利用できます。つまり，AttachmentsはBlock Kitで作成されたメッセージの左側に色付きのバーを追加する機能，として捉えるのがよいかと思います。
+
+色つきのバーを利用することで，各種通知をその内容に応じて色分けでき，通知の種別を区別しやすくすることができます。
 
 AttachmentsもBlock Kitと同様，オブジェクトのリストで表現されます。1つのAttachmentを投稿する場合は，以下のようなpayloadになります。
 
@@ -713,7 +715,9 @@ AttachmentsもBlock Kitと同様，オブジェクトのリストで表現され
 }
 \end{lstlisting}
 
-\verb|attachments|要素の内容のほとんどがBlock Kitと同様であることがわかります。違いは\verb|color|要素の有無です。このpayloadを使って，Slackにメッセージを投稿すると，以下のように表示されます。
+\verb|attachments|要素の内容のほとんどがBlock Kitと同様であることがわかります。違いは\verb|color|要素の有無です。\verb|color|要素に指定したカラーコードの色でメッセージの左側に色つきのバーが追加されます。また，このフィールドに\verb|good|, \verb|warning|, \verb|danger|を指定するとそれぞれ緑，黄，赤でバーが表示されます。色でステータスを表現する場合はこれらを指定するとわかりやすいかと思います。
+
+このpayloadを使って，Slackにメッセージを投稿すると，以下のように表示されます。
 
 \begin{figure}[H]
  \centering
@@ -724,12 +728,13 @@ AttachmentsもBlock Kitと同様，オブジェクトのリストで表現され
 
 \section{Google FormsとGAS}
 
-これまではGoogle Apps ScriptとIncoming Webhookだけを使って，Slackにいろいろなメッセージを投稿してきました。ここからは，実際にGoogle Appsとの連携プログラムを書きます。まずは，Google Formsを題材にGASを作成していきましょう。
+これまではGoogle Apps ScriptとIncoming Webhookだけを使って，Slackにいろいろなメッセージを投稿してきました。ここからは，実際にGoogle Appsと連携するスクリプトを書きます。まずは，Google Formsを題材にGASを作成しましょう。
 
-この章では，「フォームが送信されたらSlackにその内容を通知する」スクリプトを作成します。Google Formsでは，Google Spreadsheetsに回答内容を蓄積する機能はありますが，Slackへの通知機能はありません。問い合わせフォームや依頼フォームなど，回答が送信されたら即座にキャッチしたいケースは多くあるかと思います。ぜひ，GASを使ってSlack通知を実装してみてください。
+この章では，「フォームが送信されたらSlackにその内容を通知する」スクリプトを作成します。問い合わせフォームや依頼フォームなど，回答が送信されたら即座にキャッチしたいケースは多くあるかと思います。ぜひ，GASを使ってSlack通知を実装してみてください。
 
 \paragraph{本章で扱うトピック}
 \begin{itemize}
+\item FormApp クラスを用いたフォームの作成
 \item Google Appsに紐づくスクリプトとイベントトリガ
 \item Google FormsにおけるEvent Object
 \end{itemize}
@@ -740,11 +745,11 @@ AttachmentsもBlock Kitと同様，オブジェクトのリストで表現され
 
 GASにおけるGoogle FormsへのAPIは\verb|FormApp|というクラスで提供されます。\verb|FormApp|は，スクリプトによるフォームの作成，編集，そして参照の手段を提供します。つまり，フォームそのものに対する操作を提供するAPIとなります。実際にフォームから送信された回答を取得する手段は\verb|FormApp|は持っていません。これについては次節\ref{subsec:event_object}以降で扱います。
 
-普段私たちがGoogle Formsでフォームを作成するときはWeb画面から作成することと思います。わざわざスクリプトを書いてフォームを作成・編集するメリットはイメージしづらいかもしれません。例えば，セレクトボックスの要素を何らかのスプレッドシートやデータベースに記録されている値から動的に生成したい場合などにおいて，スクリプトを用いたフォーム作成が効果を発揮します。ここでも，``Google FormsとGoogle Spreadsheets''といった，「異なるサービス間の連携」においてGoogle Apps Scriptが効果を発揮することがわかるかと思います。
+普段私たちがGoogle Formsでフォームを作成するときはWeb画面から作成することと思います。わざわざスクリプトを書いてフォームを作成・編集するメリットはイメージしづらいかもしれません。しかし例えば，セレクトボックスの要素を何らかのスプレッドシートやデータベースに記録されている値から動的に生成したい場合などにおいて，スクリプトを用いたフォーム作成が効果を発揮します。ここでも，``Google FormsとGoogle Spreadsheets''といった，「異なるサービス間の連携」においてGoogle Apps Scriptが効果を発揮することがわかるかと思います。
 
 \subsubsection{FormAppを使ったフォーム作成}
 
-この項では，テキスト入力形式の質問とセレクトボックス形式の質問を持ったフォームを，Google Apps Scriptで作成してみます。これまでと同様に，Google Apps Scriptのプロジェクトを作成します。今回は，関数名を\verb|createForm|とします。
+この項では，テキスト入力形式の質問とセレクトボックス形式の質問を持ったフォームをGoogle Apps Scriptから作成してみます。これまでと同様に，Google Apps Scriptのプロジェクトを作成します。今回は，関数名を\verb|createForm|とします。
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=FormApp sample 1]
 function createForm() {
@@ -752,7 +757,7 @@ function createForm() {
 }
 \end{lstlisting}
 
-画面からフォームを作成する場合も，Google Apps Scriptでフォームを作成する場合も，基本的な流れは変わりません。\textbf{新しいフォームを作成}して，作成したフォームに\textbf{質問を追加}するといった流れです。
+画面からフォームを作成する場合もGoogle Apps Scriptでフォームを作成する場合も，基本的な流れは変わりません。\textbf{新しいフォームを作成}して，作成したフォームに\textbf{質問を追加}するといった流れです。
 
 まず，新しいフォームを作成する場合は，\verb|FormApp.create()|を使用します。引数には，作成するフォームの名称を入力します。
 
@@ -764,9 +769,9 @@ function createForm() {
 
 上記の状態でスクリプトを実行すると，\verb|Sample Form|という名称で空のフォームが作成されます。なお，このスクリプトは\textbf{実行するごとに新しいフォームが作成されますので，注意が必要です}。
 
-ここから，フォームに対して質問を追加していきます。まずは，テキスト入力形式の質問を追加します。テキスト入力形式の質問には，短文回答（1行）と長文回答（複数行）の2種類があります。今回は，長文回答形式の質問を追加します。
+ここから，フォームに対して質問を追加していきます。まずは，テキスト入力形式の質問を追加します。テキスト入力形式の質問には，短文回答（1行）と長文回答（複数行）の2種類があります。今回の例では，長文回答形式の質問を追加します。
 
-長文回答形式の質問を追加するには，フォームに対して，\verb|addParagraphTextItem()|を実行します。
+長文回答形式の質問を追加するには，フォームに対して\verb|addParagraphTextItem()|を実行します。
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=FormApp sample 3]
 function createForm() {
@@ -805,10 +810,10 @@ function createForm() {
  \label{fig:form_sample1}
 \end{figure}
 
-次に，セレクトボックス形式の質問を追加していきます。セレクトボックス回答形式の質問を追加するには，フォームに対して，\verb|addListItem()|を実行します。
+次に，セレクトボックス形式の質問を追加していきます。セレクトボックス形式の質問を追加するには，フォームに対して，\verb|addListItem()|を実行します。
 
 
-タイトルや説明の設定は，\verb|ParagraphTextItem|と同様に\verb|setTitle()|，\verb|setHelpText()|で行えます。セレクトボックスにアイテムを追加するのは\verb|ListItem.setChoiceValues()|が最も簡便な手法です。これは，文字列のリストをまとめてアイテムとして追加するメソッドです。
+タイトルや説明の設定は，\verb|ParagraphTextItem|と同様に\verb|setTitle()|，\verb|setHelpText()|で行えます。セレクトボックスにアイテムを追加する方法としては\verb|ListItem.setChoiceValues()|が簡便な手法です。これは，文字列のリストをまとめてアイテムとして追加するメソッドです。
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=FormApp sample 5]
 function createForm() {
@@ -877,7 +882,7 @@ function createForm() {
 
 前節では，FormAppを使ってスクリプトからフォームを作成する方法を紹介しました。本節では，フォームに送信された回答をGASで受け取る方法について紹介します。今回は，前節で作成したフォーム(図\ref{fig:form_sample3})を引き続き使用します。
 
-まず，フォーム編集画面右上にある，「\ $\mathbf{\vdots}$\ 」をクリックし，「スクリプト エディタ」を選択します。すると，スクリプト編集画面が開きます。これは，フォームに紐付いたスクリプトになりますので，以降はこちらからスクリプトを編集します。
+まず，フォーム編集画面右上にある，「\ $\mathbf{\vdots}$\ 」をクリックし，「スクリプト エディタ」を選択します。すると，スクリプト編集画面が開きます。ここで開かれたスクリプト（GASプロジェクト）はフォームに紐付いたスクリプトになりますので，以降はこちらからスクリプトを編集します。
 
 \begin{figure}[H]
  \centering
@@ -938,7 +943,7 @@ function createForm() {
 
 \subsubsection{Event Object}
 
-イベントトリガによって実行された関数は，イベントに関する情報を関数の引数として受け取ることができます。これを\href{https://developers.google.com/apps-script/guides/triggers/events?hl=en}{Event Object}といいます。Event Objectを受け取るために，実行される関数に引数を設定します。いま，「フォーム送信時」のイベントをトリガとして設定しているので，それに対応する引数として，\verb|formSendEventObject|と名前をつけます。
+イベントトリガによって実行された関数は，そのイベントに関する情報を関数の引数として受け取ることができます。受け取ったイベントに関する情報のことを\href{https://developers.google.com/apps-script/guides/triggers/events?hl=en}{Event Object}と呼びます。Event Objectを受け取るために，実行される関数に引数を設定します。いま，「フォーム送信時」のイベントをトリガとして設定しているので，引数に\verb|formSendEventObject|と名前をつけます。
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=Event Object sample 1]
 function getAnswer(formSendEventObject) {
@@ -946,11 +951,13 @@ function getAnswer(formSendEventObject) {
 }
 \end{lstlisting}
 
-Event Objectは，対応するイベントに応じて保持している情報が異なります。フォーム送信イベントによって受け取るEvent Objectにはフォームの回答，スプレッドシートの編集イベントによって受け取るEvent Objectには編集された内容・・・といった具合です。今回はフォーム送信によるEvent Objectを受け取っていますので，Event Objectにはフォームの回答が含まれています。このEvent Objectの詳細は\href{https://developers.google.com/apps-script/guides/triggers/events?hl=en#form-submit_1}{こちら}に記載されていますが，例えばフォームの回答は\verb|response|要素に含まれています。\verb|response|要素には，フォームの回答を格納するための\verb|FormResponse|クラスのオブジェクトが含まれています。\verb|FormResponse|クラスのオブジェクトには，実際に送信された回答の内容，送信された時間，送信した人のメールアドレス\footnote{フォームにメールアドレスを収集する設定が有効になっている場合のみ}などが格納されています。まずは，送信された回答を取得してみましょう。
+Event Objectは，そのイベントに応じて保持している情報が異なります。フォーム送信イベントによって受け取るEvent Objectにはフォームの回答，スプレッドシートの編集イベントによって受け取るEvent Objectには編集された内容・・・といった具合です。今回はフォーム送信によるEvent Objectを受け取っていますので，Event Objectにはフォームの回答が含まれています。このEvent Objectの詳細は\href{https://developers.google.com/apps-script/guides/triggers/events?hl=en#form-submit_1}{こちら}に記載されていますが，例えば送信されたフォームの回答は\verb|response|要素に含まれています。\verb|response|要素には，フォームの回答を格納するための\verb|FormResponse|クラスのオブジェクトが含まれています。\verb|FormResponse|クラスのオブジェクトには，実際に送信された回答の内容，送信された時間，送信した人のメールアドレス\footnote{フォームにメールアドレスを収集する設定が有効になっている場合のみ}などが格納されています。まずは，送信された回答を取得してみましょう。
 
 \paragraph{回答の内容を取得する}
 
-実際の回答を取得するには，\verb|FormResponse.getItemResponses()|を実行します。これは，個々の回答を格納するための\verb|ItemResponse|クラスのリストが返ってきます。
+実際の回答を取得するには，\verb|FormResponse.getItemResponses()|を実行します。すると，\verb|ItemResponse|クラスのリストが返ってきます。\verb|ItemResponse|クラスは，個々の回答を格納するためのクラスです。つまり，\verb|FormResponse.getItemResponses()|を実行すると，フォームの各設問に対する回答がリストとして返ってきます。
+
+以下のコードでは，回答のリストを\verb|itemResponses|変数に格納しています。
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=Event Object sample 2]
 function getAnswer(formSendEventObject) {
@@ -959,7 +966,7 @@ function getAnswer(formSendEventObject) {
 }
 \end{lstlisting}
 
-\verb|itemResponses|変数を\verb|Logger.log(itemResponse)|でログに出力してみましょう。イベントトリガによって実行されるスクリプトのログは，スクリプトエディタ左側の``実行数''タブを開くことでスクリプトの実行単位で確認できます。
+まずは，\verb|itemResponses|変数を\verb|Logger.log(itemResponse)|でログに出力してみましょう。イベントトリガによって実行されるスクリプトのログは，スクリプトエディタ左側の``実行数''タブを開くことでスクリプトの実行単位で確認できます。
 
 この例では図\ref{fig:form_sample3}のフォームを使用していますので，質問の数は2つです。\verb|itemResponses|をそのままログに出力すると，以下のように出力されます。
 
@@ -970,7 +977,7 @@ function getAnswer(formSendEventObject) {
 2つの回答が含まれているので，要素を2つ持ったリストになります。しかし，このままでは\verb|ItemResponse|クラスのオブジェクトが2つあることしか分からず，どのような回答が得られたのかわかりません。
 
 
-\verb|ItemResponse|オブジェクトから，実際の回答内容を取得するには，\verb|ItemResponse.getResponse()|を実行します。いま，\verb|ItemResponse|オブジェクトのリストとして回答を取得できていますので，以下のようなスクリプトで順にログに出力してみます。
+\verb|ItemResponse|オブジェクトから，実際の回答内容を取得するには，\verb|ItemResponse.getResponse()|を実行します。いま，\verb|ItemResponse|オブジェクトのリストとして回答を取得できていますので，for文を使った以下のようなスクリプトで順にログに出力してみます。
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=Event Object sample 3]
 function getAnswer(formSendEventObject) {
@@ -992,7 +999,7 @@ function getAnswer(formSendEventObject) {
 \end{lstlisting}
 
 しかし，今ログに表示されているのは回答の内容のみであり，「どのような質問への回答なのか」が分かりづらく，ログとして不親切になってしまっています。
-そこで，ログに質問のタイトルも出力するようにしてみましょう。質問のタイトルは，\verb|ItemResponse.getItem().getTitle()|で取得できます。これは，まず\verb|ItemResponse.getItem()|で質問の内容を持つ\verb|Item|オブジェクトを取得し，それからタイトルを取得しています。ログをさらに読みやすくするため，質問と回答を区別できるような文言を追加し，以下のようなスクリプトを書きます。
+そこで，ログに質問のタイトルも出力するようにしてみましょう。質問のタイトルは\verb|ItemResponse.getItem().getTitle()|で取得できます。これは，まず\verb|ItemResponse.getItem()|で質問の内容を持つ\verb|Item|オブジェクトを取得し，そこからタイトルを取得しています。ログをさらに読みやすくするため，質問と回答を区別できるような文言を追加し，以下のようなスクリプトを書きます。
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,frame=single,caption=Event Object sample 4]
 function getAnswer(formSendEventObject) {
@@ -1097,7 +1104,7 @@ $i$行目の$j$番目の回答を$A_{i, j}$とすると，$\left[\left[A_{1, 1},
 
 しかし，プログラムは視覚を持ちません。そのため，これからプログラムを作成する私たちはスプレッドシートの構造について改めて認識する必要があります。
 
-さて，スプレッドシートは何から構成されているでしょうか？大まかに分けると，以下のような要素から構成されています。
+さて，スプレッドシートは何から構成されているでしょうか？大まかに分けると，スプレッドシートは以下のような要素から構成されています。
 
 \begin{itemize}
 \item スプレッドシート全体
@@ -1119,7 +1126,7 @@ $i$行目の$j$番目の回答を$A_{i, j}$とすると，$\left[\left[A_{1, 1},
  \label{fig:spreadsheet_matryoshka}
 \end{figure}
 
-ところで，先程``私たちは（スプレッドシートの）構造を視覚を用いて無意識的に認識している''と説明しました。この具体的な例について紹介しましょう。
+ところで，先程``私たちはスプレッドシートの構造を視覚を用いて無意識的に認識している''と説明しました。この具体的な例について紹介しましょう。
 
 
 あなたがあるスプレッドシートに記録されている情報を確認したいとき，以下のような行動を取ると思います。
@@ -1129,7 +1136,7 @@ $i$行目の$j$番目の回答を$A_{i, j}$とすると，$\left[\left[A_{1, 1},
 \item 対象のシートを開いたら，視覚を用いて目的の情報を探します。
 \end{enumerate}
 
-上記のフローはプログラムが行っている方法とほぼ同じと言えます。しかし，この構造について意識することは普段ありません。
+上記のフローはプログラムが行っている方法とほぼ同じと言えます。しかし，この構造について意識することは普段ありません。それはGUIがその構造を直感的に利用できるように提供してくれているからに他ならないのですが，一方でプログラムやスクリプトは視覚を持たず，構造を構造のまま扱うので，スクリプトを作成する際はこの構造を明確に意識する必要があります。
 
 
 \subsection{SpreadsheetApp}
@@ -1137,7 +1144,7 @@ $i$行目の$j$番目の回答を$A_{i, j}$とすると，$\left[\left[A_{1, 1},
 
 フォームを操作するクラスが\verb|FormApp|だったように，スプレッドシートを操作するクラスは\verb|SpreadsheetApp|です。「Excel方眼紙」「ネ申Excel」などと揶揄されるように\footnote{ググるといろいろな議論が出てくる。（例: \href{https://oku.edu.mie-u.ac.jp/~okumura/SSS2013slide.pdf}{https://oku.edu.mie-u.ac.jp/~okumura/SSS2013slide.pdf}）}，スプレッドシートは単なる表計算に収まらない非常に自由な表現が可能です。したがって，\verb|SpreadsheetApp|ができる操作も非常に多く，その全てをこのテキストで紹介することはできません。本テキストでは，Slackとの連携に主軸を置いているため，特にスプレッドシートから値を取り出す方法を中心に\verb|SpreadsheetApp|の扱い方について説明します。
 
-本節では，出席管理や，集金管理などを行うシートを想定して，以下の図\ref{fig:spreadsheet_sample}に示すようなスプレッドシートの値をスクリプトから取得する方法について説明します。
+本節では，出席管理や集金管理などを行うシートを想定して，以下の図\ref{fig:spreadsheet_sample}に示すようなスプレッドシートの値をスクリプトから取得する方法について説明します。
 
 \begin{figure}[H]
  \centering
@@ -1192,17 +1199,17 @@ function spreadsheetSample() {
 }
 \end{lstlisting}
 
-対象としているスプレッドシートに複数のシートがあって，それらをまとめて取得したい場合は\verb|Spreadsheet.getSheets()|が有効です。これは，スプレッドシートにあるシート全てを含むリストを取得することができます。
+対象としているスプレッドシートに複数のシートがあって，それらをまとめて取得したい場合は\verb|Spreadsheet.getSheets()|が有効です。これは，スプレッドシートにあるシート全てのリストを取得することができます。
 
 \subsubsection{シートから指定した範囲のセル/値を取得する}
 \label{subsec:get_range}
 
 
-前項で取得したシートから，指定した範囲のセル，もしくは値を取得しましょう。
+前項で取得したシートから，指定した範囲のセルまたは値を取得しましょう。
 
 \begin{itembox}[l]{Column: セルと値の違い}
 
-あるセルに\verb|100|と書かれていた場合を考えてみます。このセルは\verb|100|という値以外の情報も持っています。例えば背景色や文字色，フォントタイプ，サイズ，罫線の有無・・・などです。
+あるセルに\verb|100|と書かれていた場合を考えてみます。このセルは\verb|100|という値以外の情報も持っています。値以外の情報とは，背景色や文字色，フォントタイプ，サイズ，罫線の有無・・・などを指します。
 
 
 「セル」はこれらの情報すべてを包含する概念ですが，「値」はその「セル」がもつ\verb|100|という値そのものを指します。
@@ -1261,16 +1268,16 @@ function spreadsheetSample() {
 
 例えば，年月日はそれぞれ「元年」「1月」「1日」から数えますので，これは1-originとなります。一方で，時間は「0時」「0分」「0秒」から数えますので，これは0-originとなります。
 
-プログラミングにおいては配列・リストの添字(インデックス)は0-originであることが多いです。また，JavaScriptの\verb|Date|クラスでは，月は0-origin，日は1-originと，異なるオリジンが混在します。複数のオリジンを行き来するケースはしばしばありますので，慣れておくとよいです。
+プログラミングにおいては配列・リストの添字(インデックス)は0-originであることが多いです。しかし，JavaScriptの\verb|Date|クラスでは，月は0-origin，日は1-originと，異なるオリジンが混在します。複数のオリジンを行き来するケースはしばしばありますので，慣れておくとよいです。
 
 \end{itembox}
 
 
-さて，先程\verb|Sheet.getSheetValues|に引数を与えて，今値が入力されている「6行分」の値を取得することができました。しかし，そもそも「6行」取得したかったのではなく，\textbf{始点の行から末尾の行まで}取得したいはずです。例えば，この管理票で管理する対象の人が増えたとき，スクリプトで\verb|getSheetValues|に与えている値をいちいち書き換えることになってしまいます。これではスクリプトを書いた意味がなくなってしまいます。
+さて，先程\verb|Sheet.getSheetValues|に引数を与えて，今値が入力されている「6行分」の値を取得することができました。しかし，そもそも「6行」取得したかったのではなく，\textbf{始点の行から末尾の行まで}取得したかったのでした。「6行」という固定値を指定していると，この管理票で管理する対象の人が増えたとき\verb|getSheetValues|に与えている値をその都度書き換えることになってしまいます。これでは不便です。
 
-そこで，取得する行数を常に自動的に取得してくれるようにします。末尾の行を取得するには，\verb|Sheet.getLastRow()|を使います。図\ref{fig:spreadsheet_sample}の例で言うと，7行目が末尾になりますので，このメソッドを実行すると7が返ってきます。
+そこで，取得する行数を自動的に取得するようにスクリプトを修正します。末尾の行を取得するには\verb|Sheet.getLastRow()|を使います。図\ref{fig:spreadsheet_sample}の例で言うと，7行目が末尾の行になるので，このメソッドを実行すると7が返ってきます。
 
-2行目から範囲を指定していますので，実際に\verb|Sheet.getSheetValues|に渡す際にはヘッダ行分の1を減ずる必要があります。したがって，\verb|Sheet.getSheetValues(2, 1, sheet.getLastRow() - 1, 2)|となります。
+2行目から範囲を指定しているので，実際に\verb|Sheet.getSheetValues|に渡す際にはヘッダ行分の1を減ずる必要があります。したがって，\verb|Sheet.getSheetValues(2, 1, sheet.getLastRow() - 1, 2)|となります。
 
 したがって，最終形としては以下のようになります。このスクリプトを実行すると，先程と同様なログが出力されます。シートに行を追加しても正しく末尾まで取得できていことを確認してみましょう。
 
@@ -1434,7 +1441,7 @@ Google Formsのスクリプトの際はイベントトリガを設定しまし�
 毎月何日の何時台に実行する，といった形で実行できます。
 \end{itemize}
 
-上に示したリストからわかるように，「特定の時間」に実行する方法は「特定の日時」トリガーしかなく，「特定の時間に定期的に実行する」といったトリガーの設定方法は存在しません\footnote{なお，すこし頑張ればこれも実現できます。see: \href{https://qiita.com/chihiro/items/d23692c308c89e1b1ee2}{https://qiita.com/chihiro/items/d23692c308c89e1b1ee2}}。これは，実際にスクリプトが実行されるサーバー側の負荷分散のための制約です。
+上に示したリストからわかるように，「特定の時間」に実行する方法は「特定の日時」トリガーしかなく，「特定の時間に定期的に実行する」といったトリガーの設定方法は存在しません。定期的に実行するトリガで指定できるのはあくまで時間帯であり，明確に何時何分に実行するといったことはできません\footnote{なお，すこし頑張ればこれも実現できます。see: \href{https://qiita.com/chihiro/items/d23692c308c89e1b1ee2}{https://qiita.com/chihiro/items/d23692c308c89e1b1ee2}}。これは，実際にスクリプトが実行されるサーバー側の負荷分散のための制約によるものと思われます。
 
 \begin{figure}[H]
  \centering
@@ -1457,7 +1464,7 @@ Google Formsのスクリプトの際はイベントトリガを設定しまし�
 
 ちょっとしたプリント程度の分量で収まると思ったら，全然収まりませんでした。
 
-さて，今回取り扱った内容は，Google Apps Script，Incoming Webhook共にイロハのイ程度の内容です。これらでできることは本書で説明した内容に留まりません。一方で，どちらも公式ドキュメントが英語でのみ提供されていないことが学習の障壁になっていますが，テクニカル系のドキュメントは比較的平易な英語で書かれているので，食わず（読まず）嫌いせずに読んでみましょう。ちなみに，世の中には「公式ドキュメント読めば5分で解決することで5時間もGoogleとにらめっこするな」という言葉があります\footnotemark。
+さて，今回取り扱った内容は，Google Apps Script，Incoming Webhook共にイロハのイ程度の内容です。したがって，これらでできることは本書で説明した内容に留まりません。一方で，どちらも公式ドキュメントが英語でしか提供されていないことが学習の障壁になっていますが，テクニカル系のドキュメントは比較的平易な英語で書かれているので，食わず（読まず）嫌いせずに読んでみましょう。ちなみに，世の中には「公式ドキュメント読めば5分で解決することで5時間もGoogleとにらめっこするな」という言葉があります\footnotemark。
 \footnotetext{この言葉の出典となったnoteの記事はリンク切れしてしまったので，類似のこちらを紹介します。『私たちはどうして公式ドキュメントが読めないのか？』( https://qiita.com/hiraike32/items/f0a211cceb0ecc516b6c )}
 
 \clearpage
